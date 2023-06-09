@@ -1,0 +1,28 @@
+.LoginWrapper{
+    border-style:solid;
+    border-color:rgb(211,211,211);
+    width:675px;
+    height:400px;
+    margin-top:250px;
+    justify-content: center;
+    align-items:center;
+    border-radius:10%;
+}
+
+.Login{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height:100%;
+    width:100%;
+}
+
+.LoginContent{
+    align-items: center;
+    justify-content: center;
+    margin-top:10%;
+}
+
+.LoginTitle{
+    text-align:center;
+}
