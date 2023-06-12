@@ -4,3 +4,25 @@
     color:white;
     margin-left:25px;
 }
+
+
+.wrapper{
+    display:grid;
+    grid-template-columns: 30% 30% 30%;
+    grid-column-gap: 50px;
+    grid-row-gap:180px;
+    grid-template-rows: 30% 30% 30%;
+}
+
+
+.percentage_wrapper{
+    display:flex;
+    justify-content: space-around;
+}
+
+.percentage_content{
+    border-style:solid;
+    border-color:black;
+    width:300px;
+    text-align: center;
+}

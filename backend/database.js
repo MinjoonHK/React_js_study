@@ -1,0 +1,26 @@
+module.exports =[
+    {
+        id:1,
+        username:'test1',
+        email:'minjoon.park.hk@gmail.com',
+        pasword:'1111'
+    },
+    {
+        id:2,
+        username:'test2',
+        email:'kellon@gmail.com',
+        pasword:'2222'
+    },
+    {
+        id:3,
+        username:'test3',
+        email:'Polyu@gmail.com',
+        pasword:'3333'
+    },
+    {
+        id:4,
+        username:'test4',
+        email:'HK@gmail.com',
+        pasword:'4444'
+    },
+]

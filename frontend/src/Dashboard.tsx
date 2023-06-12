@@ -9,6 +9,8 @@ import {
 import { Layout, Menu, Button, theme } from 'antd';
 import DemoLine from './DemoLine';
 import styles from '../src/css/Dashboard.module.css'
+import DemoColumn from './DemoColumn';
+import DemoGauge from './DemoGauge';
 const { Header, Sider, Content } = Layout;
 
 const App: React.FC = () => {
@@ -42,8 +44,8 @@ const App: React.FC = () => {
         ],
       },
       {
-        label: "Energy Performance",
-        key: "/Performance", //key name should be uniform
+        label: "Company List",
+        key: "/company", //key name should be uniform
         children: [
           {
             key: "/HourlyPerformance",
@@ -65,28 +67,8 @@ const App: React.FC = () => {
           },
         ],
       },{
-        label: "Energy Performance",
+        label: "See in Map",
         key: "/Performance", //key name should be uniform
-        children: [
-          {
-            key: "/HourlyPerformance",
-            label: "Hourly"
-          },
-          {
-            key: "/DailyPerformance",
-            label: "Daily"
-          },
-          ,
-          {
-            key: "/MonthlyPerformance",
-            label: "Monthly"
-          },
-          ,
-          {
-            key: "/YearlyPerformance",
-            label: "Yearly"
-          },
-        ],
       },
   
 ]
@@ -118,6 +100,29 @@ const App: React.FC = () => {
           <span className={styles.title}></span>Kellon Energy
         </Header>
         <Content
+        style={{
+          margin: '24px 16px',
+          padding: 24,
+          minHeight: 100,
+          background: colorBgContainer,
+        }}
+        >
+          <div className={styles.percentage_wrapper}>
+            <div className={styles.percentage_content}>
+               <h3>Electricity Produced</h3>
+              </div>
+            <div className={styles.percentage_content}>
+              <h3>Income Produced </h3>
+              </div>
+            <div className={styles.percentage_content}>
+              <h3>Temperature </h3>
+              </div>
+            <div className={styles.percentage_content}>
+              <h3>No. of Panels</h3>
+              </div>
+          </div>
+        </Content>
+        <Content
           style={{
             margin: '24px 16px',
             padding: 24,
@@ -125,7 +130,14 @@ const App: React.FC = () => {
             background: colorBgContainer,
           }}
         >
-          <DemoLine/>
+          <div className={styles.wrapper}>
+            <div><DemoLine/></div>
+            <div><DemoLine/></div>
+            <div><DemoLine/></div>
+            <div><DemoLine/></div>
+            <div><DemoColumn/></div>
+          <div><DemoGauge/></div>
+          </div>
         </Content>
       </Layout>
     </Layout>
