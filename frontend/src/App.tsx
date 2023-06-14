@@ -3,6 +3,7 @@ import DashBoard from './Dashboard';
 import Login from './Login';
 import { BrowserRouter } from 'react-router-dom';
 
+
 function App() {
   return (
     <div className="App">
@@ -10,7 +11,9 @@ function App() {
         <Route path="/" element={}></Route>
       </Routes> */}
       {/* <Login/> */}
+      <BrowserRouter>
       <DashBoard/>
+          </BrowserRouter>
     </div>
   );
 }

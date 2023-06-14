@@ -11,10 +11,10 @@ import DemoLine from './DemoLine';
 import styles from '../src/css/Dashboard.module.css'
 import DemoColumn from './DemoColumn';
 import DemoGauge from './DemoGauge';
-import { BrowserRouter, HashRouter, Routes, Route, Outlet, Link  } from 'react-router-dom'; //router 
+import { BrowserRouter, HashRouter, Routes, Route, Outlet, Link, NavLink  } from 'react-router-dom'; //router 
 import EnergyPerformance from './EnergyPerformance';
-import CompanytestPage from './CompanytestPage';
-
+import CompanyInformation from './CompanyInformation';
+import Pagemap from './Pagemap';
 
 
 
@@ -52,32 +52,13 @@ const App: React.FC = () => {
         // ],
       },
       {
-        label: "Company List",
+        label: "Company Information",
         key: "/Company", //key name should be uniform
-        link:'/test',
-        children: [
-          {
-            key: "/Company1",
-            label: "Company1"
-          },
-          {
-            key: "/Company2",
-            label: "Company2"
-          },
-          ,
-          {
-            key: "/Company3",
-            label: "Company3"
-          },
-          ,
-          {
-            key: "/Company4",
-            label: "Company4"
-          },
-        ],
+        link:'/company',
       },{
         label: "See in Map",
         key: "/map", //key name should be uniform
+        link:'/map',
       },
   
 ]
@@ -92,7 +73,7 @@ const App: React.FC = () => {
           mode="inline"
           items={menuItems.map(item => ({
             ...item,
-            link: item.link ?<Link to={item.link}>{item.label}</Link> : null
+            label: item.link ?<NavLink  to={item.link}>{item.label}</NavLink > : item.label
           }))}
         />
       </Sider>
@@ -108,7 +89,6 @@ const App: React.FC = () => {
               height: 64,
             }}
           />
-          {/* <Link to="/">Kellon Energy</Link> */}
         </Header>
         <Content
         style={{
@@ -145,12 +125,11 @@ const App: React.FC = () => {
             background: colorBgContainer,
           }}
         >
-          <BrowserRouter>
           <Routes>
             <Route path="/" element={<EnergyPerformance/>}></Route>
-            <Route path="/test" element={<CompanytestPage/>}></Route>
+            <Route path="/test" element={<CompanyInformation/>}></Route>
+            <Route path="/map" element={<Pagemap/>}></Route>
           </Routes>
-          </BrowserRouter>
         </Content>
       </Layout>
     </Layout>

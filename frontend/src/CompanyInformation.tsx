@@ -1,8 +1,8 @@
-function CompanytestPage(){
+function CompanyInformation(){
     return(
         <div>
             test
         </div>
     )
 }
-export default CompanytestPage;
+export default CompanyInformation;
