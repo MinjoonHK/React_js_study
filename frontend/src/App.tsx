@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, redirect } from 'react-router-dom'; //router 
 import DashBoard from './Dashboard';
 import Login from './Login';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  
-  const handleLogin = () => {
-    setLoggedIn(true);
-  }
-
   return (
     <div className="App">
+      {/* <Routes>
+        <Route path="/" element={}></Route>
+      </Routes> */}
       {/* <Login/> */}
       <DashBoard/>
     </div>

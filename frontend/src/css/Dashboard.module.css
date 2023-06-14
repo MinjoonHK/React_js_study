@@ -22,7 +22,11 @@
 
 .percentage_content{
     border-style:solid;
-    border-color:black;
+    border-color:rgb(0,21,41);
     width:300px;
     text-align: center;
+}
+
+.percentage_values{
+    font-size:30px;
 }

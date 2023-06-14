@@ -6,11 +6,18 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, Divider } from 'antd';
 import DemoLine from './DemoLine';
 import styles from '../src/css/Dashboard.module.css'
 import DemoColumn from './DemoColumn';
 import DemoGauge from './DemoGauge';
+import { BrowserRouter, HashRouter, Routes, Route, Outlet, Link  } from 'react-router-dom'; //router 
+import EnergyPerformance from './EnergyPerformance';
+import CompanytestPage from './CompanytestPage';
+
+
+
+
 const { Header, Sider, Content } = Layout;
 
 const App: React.FC = () => {
@@ -22,53 +29,55 @@ const App: React.FC = () => {
     {
         label: "Energy Performance",
         key: "/Performance", //key name should be uniform
-        children: [
-          {
-            key: "/HourlyPerformance",
-            label: "Hourly"
-          },
-          {
-            key: "/DailyPerformance",
-            label: "Daily"
-          },
-          ,
-          {
-            key: "/MonthlyPerformance",
-            label: "Monthly"
-          },
-          ,
-          {
-            key: "/YearlyPerformance",
-            label: "Yearly"
-          },
-        ],
+        link: '/',
+        // children: [
+        //   {
+        //     key: "/HourlyPerformance",
+        //     label: "Hourly"
+        //   },
+        //   {
+        //     key: "/DailyPerformance",
+        //     label: "Daily"
+        //   },
+        //   ,
+        //   {
+        //     key: "/MonthlyPerformance",
+        //     label: "Monthly"
+        //   },
+        //   ,
+        //   {
+        //     key: "/YearlyPerformance",
+        //     label: "Yearly"
+        //   },
+        // ],
       },
       {
         label: "Company List",
-        key: "/company", //key name should be uniform
+        key: "/Company", //key name should be uniform
+        link:'/test',
         children: [
           {
-            key: "/HourlyPerformance",
-            label: "Hourly"
+            key: "/Company1",
+            label: "Company1"
           },
           {
-            key: "/DailyPerformance",
-            label: "Daily"
-          },
-          ,
-          {
-            key: "/MonthlyPerformance",
-            label: "Monthly"
+            key: "/Company2",
+            label: "Company2"
           },
           ,
           {
-            key: "/YearlyPerformance",
-            label: "Yearly"
+            key: "/Company3",
+            label: "Company3"
+          },
+          ,
+          {
+            key: "/Company4",
+            label: "Company4"
           },
         ],
       },{
         label: "See in Map",
-        key: "/Performance", //key name should be uniform
+        key: "/map", //key name should be uniform
       },
   
 ]
@@ -81,8 +90,10 @@ const App: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['1']}
-          items={menuItems}
+          items={menuItems.map(item => ({
+            ...item,
+            link: item.link ?<Link to={item.link}>{item.label}</Link> : null
+          }))}
         />
       </Sider>
       <Layout>
@@ -97,7 +108,7 @@ const App: React.FC = () => {
               height: 64,
             }}
           />
-          <span className={styles.title}></span>Kellon Energy
+          {/* <Link to="/">Kellon Energy</Link> */}
         </Header>
         <Content
         style={{
@@ -110,15 +121,19 @@ const App: React.FC = () => {
           <div className={styles.percentage_wrapper}>
             <div className={styles.percentage_content}>
                <h3>Electricity Produced</h3>
+               <p className={styles.percentage_values}>20.567 kwh</p>
               </div>
             <div className={styles.percentage_content}>
               <h3>Income Produced </h3>
+              <p className={styles.percentage_values}>10580 HKD</p>
               </div>
             <div className={styles.percentage_content}>
               <h3>Temperature </h3>
+              <p className={styles.percentage_values}>45</p>
               </div>
             <div className={styles.percentage_content}>
               <h3>No. of Panels</h3>
+              <p className={styles.percentage_values}>1260</p>
               </div>
           </div>
         </Content>
@@ -130,14 +145,12 @@ const App: React.FC = () => {
             background: colorBgContainer,
           }}
         >
-          <div className={styles.wrapper}>
-            <div><DemoLine/></div>
-            <div><DemoLine/></div>
-            <div><DemoLine/></div>
-            <div><DemoLine/></div>
-            <div><DemoColumn/></div>
-          <div><DemoGauge/></div>
-          </div>
+          <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<EnergyPerformance/>}></Route>
+            <Route path="/test" element={<CompanytestPage/>}></Route>
+          </Routes>
+          </BrowserRouter>
         </Content>
       </Layout>
     </Layout>
