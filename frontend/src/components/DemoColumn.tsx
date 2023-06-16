@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import { Column } from '@ant-design/plots';
 
 const DemoColumn = () => {
@@ -16,7 +14,7 @@ const DemoColumn = () => {
       type: 'March',
       sales: 61,
     },
-    {
+    { 
       type: 'April',
       sales: 145,
     },

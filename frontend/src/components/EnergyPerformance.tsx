@@ -1,7 +1,7 @@
 import DemoColumn from "./DemoColumn";
 import DemoGauge from "./DemoGauge";
 import DemoLine from "./DemoLine";
-import styles from '../src/css/Dashboard.module.css'
+import styles from '../css/Dashboard.module.css'
 
 function EnergyPerformance(){
     return(

@@ -1,21 +1,58 @@
-import React, { useState } from 'react';
-import DashBoard from './Dashboard';
-import Login from './Login';
-import { BrowserRouter } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import DashBoard from './components/Dashboard';
+import Login from './components/Login';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import styles from '../src/css/Login.module.css';
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import Protected from './PrivateRoute'
+import CompanyInformation from "./components/CompanyInformation";
+import EnergyPerformance from "./components/EnergyPerformance";
+import Pagemap from "./components/Pagemap";
+import Dashboard2 from "./components/Deshboard2"
 
+
+interface User {
+  accessToken: string;
+  refreshToken: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+interface Jwt_decoded {
+  id: number;
+  isAdmin: boolean;
+  iat: number;
+  exp: number;
+}
+
+interface Res {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+    email: string;
+    isAdmin: boolean;
+  }
+}
 
 function App() {
   return (
     <div className="App">
-      {/* <Routes>
-        <Route path="/" element={}></Route>
-      </Routes> */}
-      {/* <Login/> */}
       <BrowserRouter>
-      <DashBoard/>
-          </BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login/>}/>
+      <Route
+          path="*"
+          element={
+            <Protected>
+              <Dashboard2 />
+            </Protected>
+          }
+        />
+        </Routes>
+        </BrowserRouter>
     </div>
-  );
+  )
 }
 
 export default App;

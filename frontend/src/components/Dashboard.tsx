@@ -8,13 +8,14 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme, Divider } from 'antd';
 import DemoLine from './DemoLine';
-import styles from '../src/css/Dashboard.module.css'
+import styles from '../css/Dashboard.module.css'
 import DemoColumn from './DemoColumn';
 import DemoGauge from './DemoGauge';
 import { BrowserRouter, HashRouter, Routes, Route, Outlet, Link, NavLink  } from 'react-router-dom'; //router 
 import EnergyPerformance from './EnergyPerformance';
 import CompanyInformation from './CompanyInformation';
 import Pagemap from './Pagemap';
+
 
 
 
@@ -29,35 +30,16 @@ const App: React.FC = () => {
     {
         label: "Energy Performance",
         key: "/Performance", //key name should be uniform
-        link: '/',
-        // children: [
-        //   {
-        //     key: "/HourlyPerformance",
-        //     label: "Hourly"
-        //   },
-        //   {
-        //     key: "/DailyPerformance",
-        //     label: "Daily"
-        //   },
-        //   ,
-        //   {
-        //     key: "/MonthlyPerformance",
-        //     label: "Monthly"
-        //   },
-        //   ,
-        //   {
-        //     key: "/YearlyPerformance",
-        //     label: "Yearly"
-        //   },
-        // ],
+        link: '/energyPerformance',
       },
       {
         label: "Company Information",
         key: "/Company", //key name should be uniform
-        link:'/company',
-      },{
+        link:'/companyInformation',
+      },
+      {
         label: "See in Map",
-        key: "/map", //key name should be uniform
+        key: "//map", //key name should be uniform
         link:'/map',
       },
   
@@ -89,6 +71,7 @@ const App: React.FC = () => {
               height: 64,
             }}
           />
+          
         </Header>
         <Content
         style={{
@@ -126,8 +109,9 @@ const App: React.FC = () => {
           }}
         >
           <Routes>
-            <Route path="/" element={<EnergyPerformance/>}></Route>
-            <Route path="/test" element={<CompanyInformation/>}></Route>
+          <Route path="/" element={<EnergyPerformance/>}></Route>
+            <Route path="/energyPerformance" element={<EnergyPerformance/>}></Route>
+            <Route path="/companyInformation" element={<CompanyInformation/>}></Route>
             <Route path="/map" element={<Pagemap/>}></Route>
           </Routes>
         </Content>
