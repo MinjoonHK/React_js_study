@@ -2,31 +2,25 @@ import React, { useState } from 'react';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Button, theme, Divider } from 'antd';
-import DemoLine from './DemoLine';
-import styles from '../css/Dashboard.module.css'
-import DemoColumn from './DemoColumn';
-import DemoGauge from './DemoGauge';
-import { BrowserRouter, HashRouter, Routes, Route, Outlet, Link, NavLink  } from 'react-router-dom'; //router 
+import type { MenuProps } from 'antd';
+import { Layout, Menu, theme, Button, Input, Divider} from 'antd';
+import { Link, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import EnergyPerformance from './EnergyPerformance';
-import CompanyInformation from './CompanyInformation';
 import Pagemap from './Pagemap';
+import CompanyInformation from './CompanyInformation';
+import AddCompany from './CompanyAdd';
+
+const { Header, Content, Footer, Sider } = Layout;
+const { Search } = Input;
+const onSearch = (value: string) => console.log(value);
+
+function logout(){
+    localStorage.clear();
+}
 
 
-
-
-const { Header, Sider, Content } = Layout;
-
-const App: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-  const menuItems = [
+const items: MenuProps['items'] = [
     {
         label: "Energy Performance",
         key: "/Performance", //key name should be uniform
@@ -42,26 +36,33 @@ const App: React.FC = () => {
         key: "//map", //key name should be uniform
         link:'/map',
       },
-  
-]
+].map((item, index) => ({
+  key: String(index + 1),
+  label: item.link ?<NavLink  style={{textDecoration:'none'}} to={item.link}>{item.label}</NavLink > : item.label,
+
+}));
+
+const Dashboard: React.FC = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
-        <br />
-        <span className={styles.title}>Dash board</span>
-        <Menu
-          theme="dark"
-          mode="inline"
-          items={menuItems.map(item => ({
-            ...item,
-            label: item.link ?<NavLink  to={item.link}>{item.label}</NavLink > : item.label
-          }))}
-        />
+      <Sider trigger={null} collapsible collapsed={collapsed} collapsedWidth={0} style={{minHeight:"100vh"}}>
+        <div style={{color:'white', margin:'20px'}}><h2>Navigator</h2></div>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} items={items} />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button
+        <Header 
+        style={{
+          display:'flex',
+           padding: 0,
+            background: colorBgContainer,
+             justifyContent:'space-between' 
+             }} >
+        <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={() => setCollapsed(!collapsed)}
@@ -71,53 +72,42 @@ const App: React.FC = () => {
               height: 64,
             }}
           />
-          
+          <span style={{marginTop:'20px', marginRight:'75%'}}>
+          <Search
+          placeholder="input Company Name"
+          allowClear
+          enterButton="Search"
+          size="middle"
+          onSearch={onSearch}
+    />
+    </span>
+          <span style={{textAlign:'center',marginRight:'20px'}}>
+            <Link to="/Login">
+            <Button
+            onClick={() =>{ logout()}}
+            ><b>Logout</b>
+            </Button>
+            </Link>
+            
+            </span>
         </Header>
-        <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          minHeight: 100,
-          background: colorBgContainer,
-        }}
-        >
-          <div className={styles.percentage_wrapper}>
-            <div className={styles.percentage_content}>
-               <h3>Electricity Produced</h3>
-               <p className={styles.percentage_values}>20.567 kwh</p>
-              </div>
-            <div className={styles.percentage_content}>
-              <h3>Income Produced </h3>
-              <p className={styles.percentage_values}>10580 HKD</p>
-              </div>
-            <div className={styles.percentage_content}>
-              <h3>Temperature </h3>
-              <p className={styles.percentage_values}>45</p>
-              </div>
-            <div className={styles.percentage_content}>
-              <h3>No. of Panels</h3>
-              <p className={styles.percentage_values}>1260</p>
-              </div>
+        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+          <div style={{ padding: 24, textAlign: 'center', background: colorBgContainer }}>
+            {
+               <Routes>
+               <Route path="/" element={<EnergyPerformance/>}></Route>
+                 <Route path="/energyPerformance" element={<EnergyPerformance/>}></Route>
+                 <Route path="/companyInformation" element={<CompanyInformation/>}></Route>
+                 <Route path="/map" element={<Pagemap/>}></Route>
+                 <Route path="/addCompany" element={<AddCompany/>}></Route>
+               </Routes>
+            }
           </div>
         </Content>
-        <Content
-          style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-            background: colorBgContainer,
-          }}
-        >
-          <Routes>
-          <Route path="/" element={<EnergyPerformance/>}></Route>
-            <Route path="/energyPerformance" element={<EnergyPerformance/>}></Route>
-            <Route path="/companyInformation" element={<CompanyInformation/>}></Route>
-            <Route path="/map" element={<Pagemap/>}></Route>
-          </Routes>
-        </Content>
+        <Footer style={{ textAlign: 'center' }}>©2023</Footer>
       </Layout>
     </Layout>
   );
 };
 
-export default App;
+export default Dashboard;

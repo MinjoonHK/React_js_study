@@ -5,6 +5,7 @@ import styles from '../css/Dashboard.module.css'
 
 function EnergyPerformance(){
     return(
+
     <div>
     <div className={styles.wrapper}>
             <div><DemoLine/></div>
@@ -15,6 +16,7 @@ function EnergyPerformance(){
           <div><DemoGauge/></div>
           </div>
     </div>
+    
     )
 }
 

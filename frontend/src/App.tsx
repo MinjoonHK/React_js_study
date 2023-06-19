@@ -9,7 +9,7 @@ import Protected from './PrivateRoute'
 import CompanyInformation from "./components/CompanyInformation";
 import EnergyPerformance from "./components/EnergyPerformance";
 import Pagemap from "./components/Pagemap";
-import Dashboard2 from "./components/Deshboard2"
+import Dashboard2 from "./components/Dashboard"
 
 
 interface User {

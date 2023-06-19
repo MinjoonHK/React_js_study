@@ -26,7 +26,7 @@ function Login(){
     }
   };
   
-  const onFinishFailed = (errorInfo: any) => {
+  const onFinishFailed = (errorInfo: never) => {
     console.log('Failed:', errorInfo);
   };
   
@@ -39,12 +39,7 @@ function Login(){
   const [error, setError] = useState(false);
 
 
-  const handleSubmit = async (e:any) =>{
-    e.preventDefault();
-   
-  }
   
-
   return(
   <div className={styles.Login}>
   <div className={styles.LoginWrapper}>
@@ -90,14 +85,14 @@ function Login(){
     </Form.Item>
 
     <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-      <Checkbox>Remember me</Checkbox>
-     
-    </Form.Item> 
-    <a className={styles.login_form_forgot} href="">
+      <Checkbox style={{marginRight:'10%'}}>Remember me</Checkbox>
+      <a href="">
           Forgot password?
         </a>
+    </Form.Item> 
+    
 
-      <Button type="primary" htmlType="submit">
+      <Button style={{marginLeft:'33%', marginRight:'1%'}}type="primary" htmlType="submit">
         Login 
       </Button>
     
@@ -105,6 +100,7 @@ function Login(){
         Sign Up
       </Button>
 
+      
   </Form>
   </div>
   </div>
