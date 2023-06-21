@@ -60,8 +60,10 @@ const Dashboard: React.FC = () => {
           display:'flex',
            padding: 0,
             background: colorBgContainer,
-             justifyContent:'space-between' 
+            justifyContent:'space-between',
              }} >
+        
+        <div style={{display:'flex'}}>
         <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -72,16 +74,18 @@ const Dashboard: React.FC = () => {
               height: 64,
             }}
           />
-          <span style={{marginTop:'20px', marginRight:'75%'}}>
+          <span style={{marginTop:'20px'}}>
           <Search
           placeholder="input Company Name"
           allowClear
           enterButton="Search"
           size="middle"
           onSearch={onSearch}
+          
     />
     </span>
-          <span style={{textAlign:'center',marginRight:'20px'}}>
+              </div>
+          <span style={{textAlign:'center',marginRight:'20px', marginTop:'5px'}}>
             <Link to="/Login">
             <Button
             onClick={() =>{ logout()}}

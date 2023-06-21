@@ -2,13 +2,13 @@ import { Button, Checkbox, Form, Input,Alert, Space  } from 'antd';
 import styles from '../css/Login.module.css';
 import { useState  } from "react";
 import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 
-function Login(){
+function SignUp(){
   const navigate = useNavigate();
   const onFinish = async ({email, password}) => {
     try{
@@ -45,7 +45,7 @@ function Login(){
   <div className={styles.LoginWrapper}>
     <div className={styles.LoginContent}>
       <div className={styles.LoginTitle}>
-        <h1>Electricity Tracker</h1>
+        <h1>Sign Up</h1>
         </div>
       <br />
   <Form
@@ -60,16 +60,28 @@ function Login(){
   >
     <Form.Item
       label="Username"
-      name="email"
+      name="Username"
       rules={[{ required: true, message: 'Please input your username!' }]}
     >
       <Input 
-      type="email"
-      placeholder="email"
+      placeholder="John Doe"
+      className = "inputValue"
+      onChange={(e) => setEmail(e.target.value)}
+     />
+     
+    </Form.Item>
+    <Form.Item
+      label="Email"
+      name="email"
+      rules={[{ required: true, message: 'Please input valid Email address!', type:"email" }]}
+    >
+      <Input 
+      placeholder="example@gmail.com"
       className = "inputValue"
       onChange={(e) => setEmail(e.target.value)}
      />
     </Form.Item>
+    
 
     <Form.Item
       label="Password"
@@ -78,30 +90,33 @@ function Login(){
     >
       <Input.Password 
       type="password"
-      placeholder="password"
+      placeholder="Input Password"
       className = "inputValue"
       onChange={(e) => setPassword(e.target.value)}
       />
     </Form.Item>
 
-    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-      <Checkbox style={{marginRight:'10%'}}>Remember me</Checkbox>
-      <a href="">
-          Forgot password?
-        </a>
-    </Form.Item> 
+    <Form.Item
+      label="Confirm Password"
+      name="confirmPassword"
+      rules={[{ required: true, message: 'Please input your password!' }]}
+    >
+      <Input.Password 
+      type="password"
+      placeholder="Input Password Again"
+      className = "inputValue"
+      onChange={(e) => setPassword(e.target.value)}
+      />
+    </Form.Item>
     <div style={{marginBottom:"2%"}}>
-
-      <Button style={{marginLeft:'33%', marginRight:'1%'}}type="primary" htmlType="submit">
-        Login 
+      <Button
+      style={{marginLeft:'33%'}} 
+      type="primary" 
+      htmlType="submit">
+        Submit
       </Button>
-    
-      <Link to="/SignUp">
-        <Button type="primary">
-        Sign Up
-      </Button>
-        </Link>
     </div>
+
 
       
   </Form>
@@ -111,4 +126,4 @@ function Login(){
   )
 };
 
-export default Login;
+export default SignUp;

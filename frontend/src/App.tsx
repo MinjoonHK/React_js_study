@@ -9,7 +9,8 @@ import Protected from './PrivateRoute'
 import CompanyInformation from "./components/CompanyInformation";
 import EnergyPerformance from "./components/EnergyPerformance";
 import Pagemap from "./components/Pagemap";
-import Dashboard2 from "./components/Dashboard"
+import Dashboard from "./components/Dashboard"
+import Signup from "./components/Signup";
 
 
 interface User {
@@ -41,11 +42,12 @@ function App() {
       <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/signup" element={<Signup/>}/>
       <Route
           path="*"
           element={
             <Protected>
-              <Dashboard2 />
+              <Dashboard />
             </Protected>
           }
         />

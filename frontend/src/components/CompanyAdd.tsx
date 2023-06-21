@@ -66,8 +66,8 @@ const AddCompany: React.FC = () => {
       <Form.Item label="Switch" valuePropName="checked">
         <Switch />
       </Form.Item>
-      <Form.Item label="Button">
-        <Button>Button</Button>
+      <Form.Item label="Button" >
+        <Button>Submit</Button>
       </Form.Item>
     </Form>
   );
