@@ -22,6 +22,7 @@ const AddCompany: React.FC = () => {
   };
 
   return (
+
     <Form
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 14 }}
@@ -30,46 +31,40 @@ const AddCompany: React.FC = () => {
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
-    >
-      <Form.Item label="Company">
+      >
+      <Form.Item 
+      label="Company"
+      name="company"
+      rules={[{ required: true, message: 'Please input your Company Name!' }]}
+      >
+        
         <Input />
       </Form.Item>
-      <Form.Item label="Select">
-        <Select>
-          <Select.Option value="demo">Demo</Select.Option>
-        </Select>
+      <Form.Item 
+      label="Owner"
+      name="owner"
+      >
+        <Input />
       </Form.Item>
-      <Form.Item label="TreeSelect">
-        <TreeSelect
-          treeData={[
-            { title: 'Light', value: 'light', children: [{ title: 'Bamboo', value: 'bamboo' }] },
-          ]}
-        />
+      <Form.Item 
+      label="Phone Number"
+      name="phoneNumber"
+      rules={[{ required: true, message: 'Please input the Phone Number!' }]}
+      >
+        <Input />
       </Form.Item>
-      <Form.Item label="Cascader">
-        <Cascader
-          options={[
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [{ value: 'hangzhou', label: 'Hangzhou' }],
-            },
-          ]}
-        />
+      <Form.Item 
+      label="Address"
+      name="address"
+      rules={[{ required: true, message: 'Please input the Address!' }]}
+      >
+        <Input />
       </Form.Item>
-      <Form.Item label="DatePicker">
-        <DatePicker />
-      </Form.Item>
-      <Form.Item label="InputNumber">
-        <InputNumber />
-      </Form.Item>
-      <Form.Item label="Switch" valuePropName="checked">
-        <Switch />
-      </Form.Item>
-      <Form.Item label="Button" >
+      <Form.Item>
         <Button>Submit</Button>
       </Form.Item>
     </Form>
+
   );
 };
 

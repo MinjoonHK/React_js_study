@@ -1,18 +1,19 @@
-import { Button, Checkbox, Form, Input,Alert, Space  } from 'antd';
+import { Button, Checkbox, Form, Input,Alert, Space, Select  } from 'antd';
 import styles from '../css/Login.module.css';
 import { useState  } from "react";
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, Route, useNavigate } from 'react-router-dom';
 
+const { Option } = Select;
 
 
 
 
 function SignUp(){
   const navigate = useNavigate();
-  const onFinish = async ({email, password}) => {
+  const onFinish = async ({userName, email, phoneNumber, password, }) => {
     try{
-      const res = await axios.post("/login",{email, password}); 
+      const res = await axios.post("/signup",{email, password}); 
       localStorage.setItem("jwt",res.data.accessToken);
       navigate("/")
     }
@@ -29,11 +30,19 @@ function SignUp(){
   const onFinishFailed = (errorInfo: never) => {
     console.log('Failed:', errorInfo);
   };
-  
-  
 
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select style={{ width: 70 }}>
+        <Option value="852">+852</Option>
+        <Option value="86">+86</Option>
+      </Select>
+    </Form.Item>
+  );
 
-  const [user, setUser] = useState(null);
+  
+  const [userName, setUserName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -81,40 +90,60 @@ function SignUp(){
       onChange={(e) => setEmail(e.target.value)}
      />
     </Form.Item>
-    
+    <Form.Item
+        name="phone"
+        label="Phone Number"
+        rules={[{ required: true, message: 'Please input your phone number!' }]}
+      >
+        <Input 
+        placeholder="+852 1234 1234"/>
+        
+      </Form.Item>
 
     <Form.Item
-      label="Password"
-      name="password"
-      rules={[{ required: true, message: 'Please input your password!' }]}
-    >
-      <Input.Password 
-      type="password"
-      placeholder="Input Password"
-      className = "inputValue"
-      onChange={(e) => setPassword(e.target.value)}
-      />
-    </Form.Item>
+        label="Password"
+        name="password"
+        rules={[
+          {required: true, message: 'Please input your password!'}]}
+        hasFeedback
+      >
+        <Input.Password />
+      </Form.Item>
 
-    <Form.Item
-      label="Confirm Password"
-      name="confirmPassword"
-      rules={[{ required: true, message: 'Please input your password!' }]}
-    >
-      <Input.Password 
-      type="password"
-      placeholder="Input Password Again"
-      className = "inputValue"
-      onChange={(e) => setPassword(e.target.value)}
-      />
-    </Form.Item>
+      <Form.Item
+        label="Confirm Password"
+        name="confirm"
+        dependencies={['password']}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: 'Please confirm your password!',
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue('password') === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Password does not match!'));
+            },
+          }),
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
     <div style={{marginBottom:"2%"}}>
       <Button
-      style={{marginLeft:'33%'}} 
+      style={{marginLeft:'33%', marginRight:'3%'}} 
       type="primary" 
       htmlType="submit">
         Submit
       </Button>
+      <Link to="/login">
+      <Button>
+        Back to Login
+      </Button>
+      </Link>
     </div>
 
 
