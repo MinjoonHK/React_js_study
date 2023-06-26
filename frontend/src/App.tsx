@@ -11,6 +11,7 @@ import EnergyPerformance from "./components/EnergyPerformance";
 import Pagemap from "./components/Pagemap";
 import Dashboard from "./view/dashboard/Dashboard"
 import Signup from "./view/Signup";
+import ForgotPassword from "./view/forgotpassword";
 
 
 interface User {
@@ -43,6 +44,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
+        <Route path="/forgotpassword" element={<ForgotPassword/>}/>
       <Route
           path="*"
           element={

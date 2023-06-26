@@ -12,11 +12,11 @@ const AddCompany: React.FC = () => {
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
-  const onFinish = async ({userName, email, phoneNumber, password, }) => {
+  const onFinish = async ({company, owner, phoneNumber, address }) => {
     try{
-      const res = await axios.post("/addcompany",{userName, email, phoneNumber, password});
+      const res = await axios.post("/addcompany",{company, owner, phoneNumber, address});
       if(res.status === 200){
-        Swal.fire(`Welcome ${userName}`, 'You have successfully Signed Up!', 'success')
+        Swal.fire(`Great Job!`, `You have successfully added new Compnay!`, 'success')
       }
     }
     catch(err){
@@ -39,6 +39,7 @@ const AddCompany: React.FC = () => {
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
       onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
       >
       <Form.Item 
       label="Company"
@@ -69,7 +70,12 @@ const AddCompany: React.FC = () => {
         <Input />
       </Form.Item>
       <Form.Item>
-        <Button>Submit</Button>
+        <Button
+      style={{marginLeft:'33%', marginRight:'3%'}} 
+      type="primary" 
+      htmlType="submit">
+        Submit
+      </Button>
       </Form.Item>
     </Form>
 

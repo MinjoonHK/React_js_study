@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 
-function Login(){
+function ForgotPassword(){
   const navigate = useNavigate();
   const onFinish = async ({email, password}) => {
     try{
@@ -44,7 +44,7 @@ function Login(){
   <div className={styles.LoginWrapper}>
     <div className={styles.LoginContent}>
       <div className={styles.LoginTitle}>
-        <h1>Electricity Tracker</h1>
+        <h1>Find Password</h1>
         </div>
       <br />
   <Form
@@ -83,21 +83,15 @@ function Login(){
       />
     </Form.Item>
 
-    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-      <Checkbox style={{marginRight:'10%'}}>Remember me</Checkbox>
-      <Link to= "/forgotpassword">
-          Forgot password?
-        </Link>
-    </Form.Item> 
     <div style={{marginBottom:"2%"}}>
-
-      <Button style={{marginLeft:'33%', marginRight:'1%'}}type="primary" htmlType="submit">
-        Login 
-      </Button>
-    
       <Link to="/SignUp">
-        <Button type="primary">
+        <Button type="primary" style={{marginLeft:'33%', marginRight:'1%'}}>
         Sign Up
+      </Button>
+        </Link>
+        <Link to="/login">
+      <Button >
+        Back to Login
       </Button>
         </Link>
     </div>
@@ -110,4 +104,4 @@ function Login(){
   )
 };
 
-export default Login;
+export default ForgotPassword;

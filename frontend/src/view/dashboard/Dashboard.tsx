@@ -108,7 +108,7 @@ const Dashboard: React.FC = () => {
             }
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>©2023</Footer>
+        <Footer style={{ textAlign: 'center' }}>©KELLON 2023</Footer>
       </Layout>
     </Layout>
   );

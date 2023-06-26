@@ -17,7 +17,7 @@ function SignUp(){
       const res = await axios.post("/signup",{userName, email, phoneNumber, password});
       if(res.status === 200){
         Swal.fire(`Welcome ${userName}`, 'You have successfully Signed Up!', 'success')
-        .then(() => navigate("/login"))
+        navigate('/login');
       }
     }
     catch(err){
