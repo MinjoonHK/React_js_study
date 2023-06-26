@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import DashBoard from './components/Dashboard';
-import Login from './components/Login';
+import DashBoard from './view/dashboard/Dashboard';
+import Login from './view/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import styles from '../src/css/Login.module.css';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import Protected from './PrivateRoute'
+import Protected from './components/PrivateRoute'
 import CompanyInformation from "./components/CompanyInformation";
 import EnergyPerformance from "./components/EnergyPerformance";
 import Pagemap from "./components/Pagemap";
-import Dashboard from "./components/Dashboard"
-import Signup from "./components/Signup";
+import Dashboard from "./view/dashboard/Dashboard"
+import Signup from "./view/Signup";
 
 
 interface User {

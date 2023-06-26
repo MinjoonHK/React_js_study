@@ -33,7 +33,6 @@ function Login(){
   
 
 
-  const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
@@ -59,7 +58,7 @@ function Login(){
     autoComplete="off"
   >
     <Form.Item
-      label="Username"
+      label="Email"
       name="email"
       rules={[{ required: true, message: 'Please input your username!' }]}
     >

@@ -6,10 +6,10 @@ import {
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme, Button, Input, Divider} from 'antd';
 import { Link, NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import EnergyPerformance from './EnergyPerformance';
-import Pagemap from './Pagemap';
-import CompanyInformation from './CompanyInformation';
-import AddCompany from './CompanyAdd';
+import EnergyPerformance from '../../components/EnergyPerformance';
+import Pagemap from '../../components/Pagemap';
+import CompanyInformation from '../../components/CompanyInformation';
+import AddCompany from '../../components/CompanyAdd';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;

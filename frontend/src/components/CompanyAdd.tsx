@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Cascader,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-} from 'antd';
+import {Button, Form, Input,} from 'antd';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -19,6 +11,21 @@ const AddCompany: React.FC = () => {
 
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
+  };
+  const onFinish = async ({userName, email, phoneNumber, password, }) => {
+    try{
+      const res = await axios.post("/addcompany",{userName, email, phoneNumber, password});
+      if(res.status === 200){
+        Swal.fire(`Welcome ${userName}`, 'You have successfully Signed Up!', 'success')
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  };
+  
+  const onFinishFailed = (errorInfo: never) => {
+    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -31,6 +38,7 @@ const AddCompany: React.FC = () => {
       onValuesChange={onFormLayoutChange}
       size={componentSize as SizeType}
       style={{ maxWidth: 600 }}
+      onFinish={onFinish}
       >
       <Form.Item 
       label="Company"

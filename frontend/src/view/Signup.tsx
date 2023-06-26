@@ -3,27 +3,25 @@ import styles from '../css/Login.module.css';
 import { useState  } from "react";
 import axios from 'axios';
 import { Link, Route, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 const { Option } = Select;
 
 
-
-
 function SignUp(){
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal)
   const onFinish = async ({userName, email, phoneNumber, password, }) => {
     try{
-      const res = await axios.post("/signup",{email, password}); 
-      localStorage.setItem("jwt",res.data.accessToken);
-      navigate("/")
+      const res = await axios.post("/signup",{userName, email, phoneNumber, password});
+      if(res.status === 200){
+        Swal.fire(`Welcome ${userName}`, 'You have successfully Signed Up!', 'success')
+        .then(() => navigate("/login"))
+      }
     }
     catch(err){
-      if(err.response.status === 400){
-        alert('please enter the correct ID and Password')
-      }
-      else{
-        alert('Erorr')
-      }
+      console.log(err);
     }
   };
   
@@ -31,14 +29,6 @@ function SignUp(){
     console.log('Failed:', errorInfo);
   };
 
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="852">+852</Option>
-        <Option value="86">+86</Option>
-      </Select>
-    </Form.Item>
-  );
 
   
   const [userName, setUserName] = useState('');
@@ -58,7 +48,7 @@ function SignUp(){
         </div>
       <br />
   <Form
-    name="Login"
+    name="SignUp"
     labelCol={{ span: 8 }}
     wrapperCol={{ span: 16 }}
     style={{ maxWidth: 600 }}
@@ -69,13 +59,13 @@ function SignUp(){
   >
     <Form.Item
       label="Username"
-      name="Username"
+      name="userName"
       rules={[{ required: true, message: 'Please input your username!' }]}
     >
       <Input 
       placeholder="John Doe"
       className = "inputValue"
-      onChange={(e) => setEmail(e.target.value)}
+      onChange={(e) => setUserName(e.target.value)}
      />
      
     </Form.Item>
@@ -91,12 +81,15 @@ function SignUp(){
      />
     </Form.Item>
     <Form.Item
-        name="phone"
         label="Phone Number"
+        name="phoneNumber"
         rules={[{ required: true, message: 'Please input your phone number!' }]}
       >
-        <Input 
-        placeholder="+852 1234 1234"/>
+        <Input
+        placeholder="+852 1234 1234"
+        className = "inputValue"
+        onChange={(e) => setPhoneNumber(e.target.value)}
+        />
         
       </Form.Item>
 
@@ -107,7 +100,12 @@ function SignUp(){
           {required: true, message: 'Please input your password!'}]}
         hasFeedback
       >
-        <Input.Password />
+        <Input.Password 
+        type="password"
+        placeholder="password"
+        className = "inputValue"
+        onChange={(e) => setPassword(e.target.value)}
+        />
       </Form.Item>
 
       <Form.Item
@@ -145,9 +143,6 @@ function SignUp(){
       </Button>
       </Link>
     </div>
-
-
-      
   </Form>
   </div>
   </div>
