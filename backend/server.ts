@@ -74,6 +74,21 @@ app.post('/login', (req: Request, res: Response) => {
     });
   });
 
+  app.post("/addcompany", (req: Request,res : Response) =>{
+    const Contact = req.body.phoneNumber;
+    const Owner = req.body.owner;
+    const Address = req.body.address;
+    const Name = req.body.company;
+    pool.query("INSERT INTO company (Contact, Owner, Address, Name) VALUES(?, ?, ?, ?);", [Contact, Owner, Address, Name], (error:customError) => {
+        if (error) {
+            console.log(error);
+          res.status(500).send('Internal Server Error Occurred!!')
+        }
+        else{
+            res.status(200).send("Successfully added company!")
+        }
+    });
+})
 
 const verify = (req:CustomRequest,res:Response,next: NextFunction)=>{
     const authHeader = req.headers.authorization;
