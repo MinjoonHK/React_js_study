@@ -1,16 +1,25 @@
-import { Button, Checkbox, Form, Input, Card } from "antd";
-import { useState } from "react";
+import { Button, Checkbox, Form, Input, Card, Row, Col } from "antd";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
+import { useCookies } from "react-cookie";
 
+interface LoginForm {
+  email: any;
+  password: any;
+}
 function Login() {
+  const [form] = Form.useForm<LoginForm>();
   const navigate = useNavigate();
-  const onFinish = async ({ email, password }) => {
+  const onFinish = async ({ email, password, remember }) => {
     try {
       const res = await axios.post("/login", { email, password });
-      const decoded_token = jwtDecode(res.data.accessToken);
       localStorage.setItem("jwt", res.data.accessToken);
+      if (remember) {
+        setCookie("rememberEmail", email, { path: "/" });
+      } else {
+        removeCookie("rememberEmail");
+      }
       navigate("/");
     } catch (err) {
       if (err.response.status === 400) {
@@ -26,8 +35,15 @@ function Login() {
   };
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+
+  const [cookies, setCookie, removeCookie] = useCookies(["rememberEmail"]);
+
+  useEffect(() => {
+    if (cookies.rememberEmail !== undefined) {
+      setEmail(cookies.rememberEmail);
+      setTimeout(() => form.resetFields(), 300);
+    }
+  }, []);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
@@ -53,10 +69,11 @@ function Login() {
           }}
         >
           <Form
+            form={form}
             name="Login"
             layout="vertical"
             style={{ maxWidth: 600, margin: "15px" }}
-            initialValues={{ remember: true }}
+            initialValues={{ email: email, remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -72,8 +89,8 @@ function Login() {
                 size="large"
                 type="email"
                 placeholder="email"
+                autoComplete={"email"}
                 className="inputValue"
-                onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Item>
 
@@ -89,20 +106,24 @@ function Login() {
                 size="large"
                 placeholder="password"
                 className="inputValue"
-                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
-            <Form.Item style={{ width: "100%", marginBottom: 0 }}>
-              <Form.Item name="remember" valuePropName="checked">
-                <Checkbox>Remember me</Checkbox>
+            <Row>
+              <Col span={12} style={{ textAlign: "left" }}>
+                <Form.Item name="remember" valuePropName="checked">
+                  <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+              </Col>
+              <Col span={12} style={{ textAlign: "right" }}>
                 <Link
                   to="/forgotpassword"
-                  style={{ color: "black", marginLeft: "50%" }}
+                  style={{ color: "black", lineHeight: "32px" }}
                 >
                   Find ID / PW
                 </Link>
-              </Form.Item>
-            </Form.Item>
+              </Col>
+            </Row>
+
             <Form.Item>
               <Button
                 htmlType="submit"
@@ -115,6 +136,7 @@ function Login() {
                 Login
               </Button>
             </Form.Item>
+
             <Form.Item>
               <Link to="/SignUp">
                 <Button

@@ -12,11 +12,8 @@ import Pagemap from "../../components/Pagemap";
 import CompanyInformation from "../../components/CompanyInformation";
 import AddCompany from "../../components/CompanyAdd";
 import UserProfile from "../../components/UserProfile";
-import jwtDecode from "jwt-decode";
 
 const { Header, Content, Footer, Sider } = Layout;
-const { Search } = Input;
-const onSearch = (value: string) => console.log(value);
 
 function logout() {
   localStorage.clear();
@@ -73,6 +70,25 @@ const userDropdown: MenuProps["items"] = [
 ];
 
 const Dashboard: React.FC = () => {
+  // const [firstName, setFirstName] = useState("");
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("jwt");
+  //   axios
+  //     .get("/", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       setFirstName(response.data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -119,15 +135,6 @@ const Dashboard: React.FC = () => {
                 height: 64,
               }}
             />
-            <span style={{ marginTop: "20px" }}>
-              <Search
-                placeholder="input Company Name"
-                allowClear
-                enterButton="Search"
-                size="middle"
-                onSearch={onSearch}
-              />
-            </span>
           </div>
           <span
             style={{
@@ -144,7 +151,7 @@ const Dashboard: React.FC = () => {
             >
               <Dropdown menu={{ items: userDropdown }} trigger={["click"]}>
                 <a onClick={(e) => e.preventDefault()}>
-                  <Space style={{ color: "black" }}>
+                  <Space style={{ color: "black", fontSize: "20px" }}>
                     Minjoon
                     <DownOutlined />
                   </Space>
