@@ -12,6 +12,10 @@ import Pagemap from "../../components/Pagemap";
 import CompanyInformation from "../../components/CompanyInformation";
 import AddCompany from "../../components/CompanyAdd";
 import UserProfile from "../../components/UserProfile";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
+import DailyEnergyPerformance from "../../components/DailyEnergyPerformance";
+import MonthlyEnergyPerformance from "../../components/MonthlyEnergyPerformance";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -21,12 +25,22 @@ function logout() {
 
 const items: MenuProps["items"] = [
   {
-    label: "Energy Performance",
+    label: "Overall Peroformance",
     key: "/Performance", //key name should be uniform
     link: "/energyPerformance",
   },
   {
-    label: "Company Information",
+    label: "Daily Performance",
+    key: "/DailyPerformance", //key name should be uniform
+    link: "/DailyenergyPerformance",
+  },
+  {
+    label: "Monthly Performance",
+    key: "/MonthlyPerformance", //key name should be uniform
+    link: "/MonthlyenergyPerformance",
+  },
+  {
+    label: "Company List",
     key: "/Company", //key name should be uniform
     link: "/companyInformation",
   },
@@ -49,7 +63,7 @@ const items: MenuProps["items"] = [
 const userDropdown: MenuProps["items"] = [
   {
     label: (
-      <Link style={{ textDecoration: "none" }} to="/profile">
+      <Link style={{ textDecoration: "none" }} to="/userinformation">
         Profile
       </Link>
     ),
@@ -70,31 +84,46 @@ const userDropdown: MenuProps["items"] = [
 ];
 
 const Dashboard: React.FC = () => {
-  // const [firstName, setFirstName] = useState("");
+  const [greeting, setGreeting] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const getUserName = async (token: any) => {
+    try {
+      if (token) {
+        const decodedToken: any = jwtDecode(token);
+        const response = await axios.get("/dashboard", {
+          params: { Email: decodedToken.email },
+        });
+        const user = response.data;
+        if (user.FirstName) {
+          setFirstName(user.FirstName);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwt");
-  //   axios
-  //     .get("/", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((response) => {
-  //       setFirstName(response.data);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      setTimeout(() => {
+        getUserName(token);
+      }, 100);
+    }
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      setGreeting("Good Morning!");
+    } else if (hour < 18) {
+      setGreeting("Good Afternoon!");
+    } else {
+      setGreeting("Good Evening!");
+    }
+  }, []);
 
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  const [user, setUser] = useState({});
 
   return (
     <Layout>
@@ -136,11 +165,10 @@ const Dashboard: React.FC = () => {
               }}
             />
           </div>
+
           <span
             style={{
               textAlign: "center",
-              marginRight: "20px",
-              marginTop: "5px",
             }}
           >
             <span
@@ -149,10 +177,21 @@ const Dashboard: React.FC = () => {
                 fontWeight: "bold",
               }}
             >
+              <span
+                style={{
+                  color: "black",
+                  fontSize: "16px",
+                  marginRight: "16px",
+                }}
+              >
+                {greeting}
+              </span>
+
               <Dropdown menu={{ items: userDropdown }} trigger={["click"]}>
                 <a onClick={(e) => e.preventDefault()}>
-                  <Space style={{ color: "black", fontSize: "20px" }}>
-                    Minjoon
+                  <Space style={{ color: "black", fontSize: "18px" }}>
+                    {firstName ? <>{firstName}</> : null}
+
                     <DownOutlined />
                   </Space>
                 </a>
@@ -160,7 +199,12 @@ const Dashboard: React.FC = () => {
             </span>
           </span>
         </Header>
-        <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+        <Content
+          style={{
+            margin: "24px 16px 0",
+            overflow: "initial",
+          }}
+        >
           <div
             style={{
               padding: 24,
@@ -170,7 +214,10 @@ const Dashboard: React.FC = () => {
           >
             {
               <Routes>
-                <Route path="/" element={<EnergyPerformance />}></Route>
+                <Route
+                  path="/dashboard"
+                  element={<EnergyPerformance />}
+                ></Route>
                 <Route
                   path="/energyPerformance"
                   element={<EnergyPerformance />}
@@ -181,7 +228,18 @@ const Dashboard: React.FC = () => {
                 ></Route>
                 <Route path="/map" element={<Pagemap />}></Route>
                 <Route path="/addCompany" element={<AddCompany />}></Route>
-                <Route path="/profile" element={<UserProfile />}></Route>
+                <Route
+                  path="/userinformation"
+                  element={<UserProfile />}
+                ></Route>
+                <Route
+                  path="/dailyEnergyPerformance"
+                  element={<DailyEnergyPerformance />}
+                ></Route>
+                <Route
+                  path="/monthlyEnergyPerformance"
+                  element={<MonthlyEnergyPerformance />}
+                ></Route>
               </Routes>
             }
           </div>

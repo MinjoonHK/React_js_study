@@ -13,14 +13,15 @@ function Login() {
   const navigate = useNavigate();
   const onFinish = async ({ email, password, remember }) => {
     try {
-      const res = await axios.post("/login", { email, password });
-      localStorage.setItem("jwt", res.data.accessToken);
+      const res = await axios.post("/auth/login", { email, password });
+      localStorage.setItem("jwt", res.data.data);
+      console.log(res.data.data);
       if (remember) {
         setCookie("rememberEmail", email, { path: "/" });
       } else {
         removeCookie("rememberEmail");
       }
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       if (err.response.status === 400) {
         alert("please enter the correct ID and Password");

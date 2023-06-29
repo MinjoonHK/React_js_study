@@ -1,9 +1,8 @@
-import { ColumnsType } from "antd/es/table";
+import Table, { ColumnsType } from "antd/es/table";
 import DemoColumn from "./DemoColumn";
 import DemoGauge from "./DemoGauge";
 import DemoLine from "./DemoLine";
-import { Input, Space, Table, Tag } from "antd";
-import axios from "axios";
+import { Input, Tag } from "antd";
 
 interface table {
   key: number;
@@ -13,24 +12,16 @@ interface table {
   tags: string;
 }
 
-function EnergyPerformance() {
+function DailyEnergyPerformance() {
   const { Search } = Input;
   const onSearch = (value: string) => console.log(value);
-  const getValues = axios.get("/dashboard");
-
   const columns: ColumnsType<table> = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Serial Number",
+      dataIndex: "key",
       key: "key",
       align: "center",
       render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      align: "center",
     },
     {
       title: "Average Monthly Power Generation (KWH)",
@@ -75,26 +66,32 @@ function EnergyPerformance() {
       key: "address",
       align: "center",
     },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+      align: "center",
+    },
   ];
 
   const data: table[] = [
     {
       key: 1,
-      name: "ABC",
+      name: "John Brown",
       age: 32,
       address: "New York No. 1 Lake Park",
       tags: "OK",
     },
     {
       key: 2,
-      name: "CDE",
+      name: "Jim Green",
       age: 42,
       address: "London No. 1 Lake Park",
       tags: "WARNING",
     },
     {
       key: 3,
-      name: "EFG",
+      name: "Joe Black",
       age: 32,
       address: "Sydney No. 1 Lake Park",
       tags: "ERROR",
@@ -128,11 +125,11 @@ function EnergyPerformance() {
           marginBottom: "4%",
         }}
       >
-        Overall Energy Performance Company Name
+        Daily Energy Performance Company Name
       </div>
-      <Table columns={columns} dataSource={data} pagination={false} />
+      <Table columns={columns} dataSource={data} />
       <div>
-        {/* <div>
+        <div>
           <DemoLine />
         </div>
         <div>
@@ -149,10 +146,10 @@ function EnergyPerformance() {
         </div>
         <div>
           <DemoGauge />
-        </div> */}
+        </div>
       </div>
     </div>
   );
 }
 
-export default EnergyPerformance;
+export default DailyEnergyPerformance;
