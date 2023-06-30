@@ -62,7 +62,10 @@ function Login() {
               label={<div style={{ fontSize: "16px" }}>Email</div>}
               name="email"
               rules={[
-                { required: true, message: "Please input your username!" },
+                {
+                  required: true,
+                  message: "Please input correct email!",
+                },
               ]}
             >
               <Input
@@ -82,7 +85,7 @@ function Login() {
                   color: "white",
                 }}
               >
-                Login
+                Submit
               </Button>
             </Form.Item>
             <Form.Item>

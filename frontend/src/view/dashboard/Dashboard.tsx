@@ -9,10 +9,9 @@ import { Layout, Menu, theme, Button, Input, Dropdown, Space } from "antd";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
 import EnergyPerformance from "../../components/EnergyPerformance";
 import Pagemap from "../../components/Pagemap";
-import CompanyInformation from "../../components/CompanyInformation";
+import CompanyList from "../../components/CompanyList";
 import AddCompany from "../../components/CompanyAdd";
 import UserProfile from "../../components/UserProfile";
-import axios from "axios";
 import jwtDecode from "jwt-decode";
 import DailyEnergyPerformance from "../../components/DailyEnergyPerformance";
 import MonthlyEnergyPerformance from "../../components/MonthlyEnergyPerformance";
@@ -40,13 +39,18 @@ const items: MenuProps["items"] = [
     link: "/MonthlyenergyPerformance",
   },
   {
-    label: "Company List",
+    label: "Work Order",
+    key: "/map", //key name should be uniform
+    link: "/map",
+  },
+  {
+    label: "Registered Companies",
     key: "/Company", //key name should be uniform
-    link: "/companyInformation",
+    link: "/companylist",
   },
   {
     label: "See in Map",
-    key: "//map", //key name should be uniform
+    key: "/map", //key name should be uniform
     link: "/map",
   },
 ].map((item, index) => ({
@@ -83,32 +87,23 @@ const userDropdown: MenuProps["items"] = [
   },
 ];
 
+interface decodedToken {
+  ID: string;
+  Email: string;
+  Name: string;
+  Role: string;
+}
+
 const Dashboard: React.FC = () => {
   const [greeting, setGreeting] = useState("");
   const [firstName, setFirstName] = useState("");
-  const getUserName = async (token: any) => {
-    try {
-      if (token) {
-        const decodedToken: any = jwtDecode(token);
-        const response = await axios.get("/dashboard", {
-          params: { Email: decodedToken.email },
-        });
-        const user = response.data;
-        if (user.FirstName) {
-          setFirstName(user.FirstName);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      setTimeout(() => {
-        getUserName(token);
-      }, 100);
+      const decoded: decodedToken = jwtDecode(token);
+      const greetingName = decoded.Name;
+      setFirstName(greetingName);
     }
     const hour = new Date().getHours();
     if (hour < 12) {
@@ -191,7 +186,6 @@ const Dashboard: React.FC = () => {
                 <a onClick={(e) => e.preventDefault()}>
                   <Space style={{ color: "black", fontSize: "18px" }}>
                     {firstName ? <>{firstName}</> : null}
-
                     <DownOutlined />
                   </Space>
                 </a>
@@ -222,10 +216,7 @@ const Dashboard: React.FC = () => {
                   path="/energyPerformance"
                   element={<EnergyPerformance />}
                 ></Route>
-                <Route
-                  path="/companyInformation"
-                  element={<CompanyInformation />}
-                ></Route>
+                <Route path="/companylist" element={<CompanyList />}></Route>
                 <Route path="/map" element={<Pagemap />}></Route>
                 <Route path="/addCompany" element={<AddCompany />}></Route>
                 <Route

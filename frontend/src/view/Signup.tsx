@@ -19,7 +19,7 @@ function SignUp() {
     password,
   }) => {
     try {
-      const res = await axios.post("/signup", {
+      const res = await axios.post("/auth/signup", {
         firstName,
         lastName,
         company,
@@ -29,7 +29,7 @@ function SignUp() {
       });
       if (res.status === 200) {
         Swal.fire(
-          `Welcome ${firtName}`,
+          `Welcome ${firstName}`,
           "You have successfully Signed Up!",
           "success"
         );

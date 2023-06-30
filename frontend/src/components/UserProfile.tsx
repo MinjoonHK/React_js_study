@@ -9,9 +9,10 @@ const UserInformation: React.FC = () => {
   const getUserInfo = async (token: any) => {
     try {
       const decodedToken: any = jwtDecode(token);
-      const response = await axios.get("/userinformation", {
+      const response = await axios.get("/dashboard/userinformation", {
         params: { Email: decodedToken.Email },
       });
+      console.log(response);
       setUserInfo(response.data);
     } catch (error) {
       console.log(error);

@@ -4,6 +4,7 @@ import DemoGauge from "./DemoGauge";
 import DemoLine from "./DemoLine";
 import { Input, Space, Table, Tag } from "antd";
 import axios from "axios";
+import { useState } from "react";
 
 interface table {
   key: number;
@@ -15,8 +16,8 @@ interface table {
 
 function EnergyPerformance() {
   const { Search } = Input;
-  const onSearch = (value: string) => console.log(value);
-  const getValues = axios.get("/dashboard");
+  const [searchCompany, setSearchCompnay] = useState("");
+  const onSearch = (value: string) => setSearchCompnay(value);
 
   const columns: ColumnsType<table> = [
     {
@@ -128,7 +129,11 @@ function EnergyPerformance() {
           marginBottom: "4%",
         }}
       >
-        Overall Energy Performance Company Name
+        {searchCompany ? (
+          <div>Overall Performace of {searchCompany}</div>
+        ) : (
+          <div>Please Search Company</div>
+        )}
       </div>
       <Table columns={columns} dataSource={data} pagination={false} />
       <div>

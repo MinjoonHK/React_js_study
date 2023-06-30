@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import jwtDecode from "jwt-decode";
 
 interface LoginForm {
   email: any;
@@ -15,13 +16,12 @@ function Login() {
     try {
       const res = await axios.post("/auth/login", { email, password });
       localStorage.setItem("jwt", res.data.data);
-      console.log(res.data.data);
       if (remember) {
         setCookie("rememberEmail", email, { path: "/" });
       } else {
         removeCookie("rememberEmail");
       }
-      navigate("/dashboard");
+      navigate("/energyperformance");
     } catch (err) {
       if (err.response.status === 400) {
         alert("please enter the correct ID and Password");

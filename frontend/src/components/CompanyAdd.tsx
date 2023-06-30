@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Button, Form, Input, Card } from "antd";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 type SizeType = Parameters<typeof Form>[0]["size"];
 
 const AddCompany: React.FC = () => {
+  const navigate = useNavigate();
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default"
   );
@@ -15,7 +17,7 @@ const AddCompany: React.FC = () => {
   };
   const onFinish = async ({ company, owner, phoneNumber, address }) => {
     try {
-      const res = await axios.post("/addcompany", {
+      const res = await axios.post("/dashboard/companylist/addcompany", {
         company,
         owner,
         phoneNumber,
@@ -27,6 +29,7 @@ const AddCompany: React.FC = () => {
           `You have successfully added new Compnay!`,
           "success"
         );
+        navigate("/companylist");
       }
     } catch (err) {
       console.log(err);

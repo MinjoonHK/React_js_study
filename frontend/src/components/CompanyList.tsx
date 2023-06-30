@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { DownOutlined } from "@ant-design/icons";
-import { Button, Form, Radio, Space, Switch, Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type { ColumnsType, TableProps } from "antd/es/table";
-import type {
-  ExpandableConfig,
-  TableRowSelection,
-} from "antd/es/table/interface";
-import { DataType, data } from "../CompanyList";
+import type { TableRowSelection } from "antd/es/table/interface";
+import { DataType, data } from "../data/CompanyList";
 import { Link } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [
@@ -27,46 +23,6 @@ const columns: ColumnsType<DataType> = [
     align: "center",
   },
   {
-    title: "Status",
-    dataIndex: "tags",
-    key: "tags",
-    align: "center",
-    filters: [
-      {
-        text: "Success",
-        value: "success",
-      },
-      {
-        text: "Error",
-        value: "error",
-      },
-      {
-        text: "Warning",
-        value: "warning",
-      },
-    ],
-    onFilter: (value, record) => record.tags.indexOf(value as string) === 0,
-    render: (tags: string) => (
-      <>
-        {tags === "success" && (
-          <Tag color="success" key={tags}>
-            {tags}
-          </Tag>
-        )}
-        {tags === "warning" && (
-          <Tag color="warning" key={tags}>
-            {tags}
-          </Tag>
-        )}
-        {tags === "error" && (
-          <Tag color="error" key={tags}>
-            {tags}
-          </Tag>
-        )}
-      </>
-    ),
-  },
-  {
     title: "Last maintainance date",
     align: "center",
     dataIndex: "maintainence",
@@ -77,11 +33,10 @@ const columns: ColumnsType<DataType> = [
     title: "Contact",
     align: "center",
     dataIndex: "contact",
-    // sorter: (a, b) => a.age - b.age,
   },
 ];
 
-const App: React.FC = () => {
+const CompanyList: React.FC = () => {
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<SizeType>("large");
@@ -118,24 +73,24 @@ const App: React.FC = () => {
     scroll,
     tableLayout,
   };
-
+  data();
   return (
     <>
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
         <Link to="/addCompany">
           <Button>
-            <b>Click to Add company list +</b>
+            <b>Click to add company list +</b>
           </Button>
         </Link>
       </div>
       <Table
         {...tableProps}
         columns={tableColumns}
-        dataSource={hasData ? data : []}
+        // dataSource={hasData ? data : []}
         scroll={scroll}
       />
     </>
   );
 };
 
-export default App;
+export default CompanyList;

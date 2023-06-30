@@ -3,6 +3,7 @@ import DemoColumn from "./DemoColumn";
 import DemoGauge from "./DemoGauge";
 import DemoLine from "./DemoLine";
 import { Input, Tag } from "antd";
+import { useState } from "react";
 
 interface table {
   key: number;
@@ -14,7 +15,8 @@ interface table {
 
 function MonthlyEnergyPerformance() {
   const { Search } = Input;
-  const onSearch = (value: string) => console.log(value);
+  const [searchCompany, setSearchCompnay] = useState("");
+  const onSearch = (value: string) => setSearchCompnay(value);
   const columns: ColumnsType<table> = [
     {
       title: "Serial Number",
@@ -125,7 +127,11 @@ function MonthlyEnergyPerformance() {
           marginBottom: "4%",
         }}
       >
-        Monthly Energy Performance Company Name
+        {searchCompany ? (
+          <div>Monthly Performace of {searchCompany}</div>
+        ) : (
+          <div>Please Search Company</div>
+        )}
       </div>
       <Table columns={columns} dataSource={data} />
       <div>
