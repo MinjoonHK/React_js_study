@@ -3,7 +3,7 @@ import { User } from "../models/usermodel";
 import jwt from "jsonwebtoken";
 import { pool } from "../db/db";
 
-const TAG = "UUserManager";
+const TAG = "UserManager";
 class UserManager {
   async findUserByEmail(email: string): Promise<User | null> {
     try {
@@ -20,7 +20,6 @@ class UserManager {
   }
   async login(username: string, password: string) {
     const user = await this.findUserByEmail(username);
-
     if (user) {
       let passwordpass = await this.comparePassword(user.Password, password);
       if (passwordpass) {
@@ -32,6 +31,27 @@ class UserManager {
       return { success: false, error: "user_not_found" };
     }
   }
+  async SignUp(
+    FirstName: string,
+    LastName: string,
+    Company: string,
+    Password: string,
+    PhoneNumber: string,
+    Email: string
+  ) {
+    try {
+      const hashedPassword = await this.hashPassword(Password);
+      const [rows, fields] = await pool.execute(
+        "INSERT INTO user (FirstName, LastName, Company, Password, PhoneNumber, Email) VALUES(?, ?, ?, ?, ?, ?);",
+        [FirstName, LastName, Company, hashedPassword, PhoneNumber, Email]
+      );
+      return rows.insertId;
+    } catch (err) {
+      console.error(new Date(), "SignUpManager", err);
+      return null;
+    }
+  }
+
   async hashPassword(password: string) {
     console.log("....", password);
     const salt = randomBytes(16).toString("hex");

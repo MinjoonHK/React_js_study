@@ -1,2 +1,2 @@
-export * from "./user.manager"
-export * from "./device.manager"
+export * from "./user.manager";
+export * from "./dashboard.manager";
