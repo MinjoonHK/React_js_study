@@ -6,6 +6,7 @@ import {
   getUserProfile,
   getCompanyList,
 } from "../managers/dashboard.manager";
+import jwtDecode from "jwt-decode";
 
 const dashboardRouter = express.Router();
 dashboardRouter.get("/overallperformance", async (req, res) => {
@@ -37,7 +38,7 @@ dashboardRouter.get("/monthlyperformance", async (req, res) => {
 
 dashboardRouter.get("/companylist", async (req, res) => {
   try {
-    const result = getCompanyList();
+    const result = await getCompanyList();
     res.json(result);
   } catch (error) {
     console.error(error);
@@ -74,11 +75,13 @@ dashboardRouter.post(
   }
 );
 
-dashboardRouter.get("/userinformation", (req, res) => {
-  const Email = req.query.Email as string | undefined;
+dashboardRouter.get("/userinformation", async (req, res) => {
+  const token = req.query.Token as string;
+  const decodedToken = jwtDecode(token) as unknown as { Email?: string };
+  const Email = decodedToken.Email;
   if (Email)
     try {
-      const result = getUserProfile(Email);
+      const result = await getUserProfile(Email);
       res.json(result);
     } catch (error) {
       console.error(error);

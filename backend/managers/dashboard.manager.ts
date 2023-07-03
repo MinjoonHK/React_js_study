@@ -22,7 +22,7 @@ export async function addCompanyManager(
 export async function getUserProfile(email: string) {
   try {
     let [users, _] = (await pool.query(
-      "SELECT * FROM user WHERE Email = ? limit 0, 1",
+      "SELECT FirstName, LastName, Email, Role, PhoneNumber, isActive, created_at, Company FROM user WHERE Email = ? limit 0, 1",
       [email]
     )) as [User[], any];
     if (users.length) return users[0];
@@ -35,9 +35,10 @@ export async function getUserProfile(email: string) {
 
 export async function getCompanyList() {
   try {
-    let companies = await pool.query("SELECT * FROM company");
-    console.log(companies[0]);
-    return companies[0];
+    let [companies] = await pool.query(
+      "SELECT ID, Contact, Owner, Address,Created_at, Name FROM company"
+    );
+    return companies;
   } catch (err) {
     console.error(new Date(), "getComapnyList", err);
     return null;

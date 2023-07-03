@@ -66,7 +66,7 @@ class UserManager {
         Name: user.FirstName,
         Role: user.Role,
       },
-      "mySecretKey",
+      "1DI0MXbI4PtymqIILPcQQJun2QjCSXHo6KyzCiqHgHDBhIyTZ1OvBASYOA5XMmZnMSPKEVkpnWmJRjVmCLMdRHasLd991gPs61_nQkTNjbygPI3049xZUaoN8h8JmOnP80vaPOC9dhnf0Aizdxzmo9HVX6VggSG98VRv_QQcTt0",
       { expiresIn: "20m" }
     );
   };
