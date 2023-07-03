@@ -21,7 +21,7 @@ function EnergyPerformance() {
 
   const columns: ColumnsType<table> = [
     {
-      title: "Name",
+      title: "Serial Number",
       dataIndex: "name",
       key: "key",
       align: "center",
@@ -41,6 +41,12 @@ function EnergyPerformance() {
     },
     {
       title: "Total Power Generation (KWH)",
+      dataIndex: "address",
+      key: "address",
+      align: "center",
+    },
+    {
+      title: "AC voltage (Vac)",
       dataIndex: "address",
       key: "address",
       align: "center",
@@ -69,12 +75,6 @@ function EnergyPerformance() {
           )}
         </>
       ),
-    },
-    {
-      title: "AC voltage (Vac)",
-      dataIndex: "address",
-      key: "address",
-      align: "center",
     },
   ];
 

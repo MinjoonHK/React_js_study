@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Table, Tag } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type { ColumnsType, TableProps } from "antd/es/table";
@@ -8,61 +8,61 @@ import { Link } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Company Name",
-    dataIndex: "Name",
+    title: "ID",
+    dataIndex: "key",
+    align: "center",
+  },
+  {
+    title: "CompanyName",
+    dataIndex: "CompanyName",
     align: "center",
   },
   {
     title: "Address",
-    dataIndex: "Address",
+    dataIndex: "address",
     align: "center",
   },
   {
-    title: "Owner",
-    dataIndex: "Owner",
+    title: "Last maintainance date",
     align: "center",
+    dataIndex: "maintainence",
+    sorter: (a, b) =>
+      new Date(a.maintainence).valueOf() - new Date(b.maintainence).valueOf(),
   },
   {
     title: "Contact",
-    dataIndex: "Contact",
     align: "center",
-  },
-  {
-    title: "Joined Date",
-    align: "center",
-    dataIndex: "Created_at",
-    sorter: (a, b) =>
-      new Date(a.Created_at).valueOf() - new Date(b.Created_at).valueOf(),
+    dataIndex: "contact",
   },
 ];
 
-const CompanyList: React.FC = () => {
-  const [dataList, setDataList] = useState<DataType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+const WorkOrder: React.FC = () => {
   const [bordered, setBordered] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<SizeType>("large");
   const [showHeader, setShowHeader] = useState(true);
   const [rowSelection, setRowSelection] = useState<
     TableRowSelection<DataType> | undefined
   >({});
+  const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState();
   const [ellipsis, setEllipsis] = useState(false);
+  const [yScroll, setYScroll] = useState(false);
+  const [xScroll, setXScroll] = useState<string>();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await data();
-        setDataList(result);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const scroll: { x?: number | string; y?: number | string } = {};
+  if (yScroll) {
+    scroll.y = 240;
+  }
+  if (xScroll) {
+    scroll.x = "100vw";
+  }
 
   const tableColumns = columns.map((item) => ({ ...item, ellipsis }));
+  if (xScroll === "fixed") {
+    tableColumns[0].fixed = true;
+    tableColumns[tableColumns.length - 1].fixed = "right";
+  }
 
   const tableProps: TableProps<DataType> = {
     bordered,
@@ -70,26 +70,27 @@ const CompanyList: React.FC = () => {
     size,
     showHeader,
     rowSelection,
+    scroll,
     tableLayout,
   };
-
+  data();
   return (
     <>
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
-        <Link to="/addCompany">
+        <Link to="/addWorkOrder">
           <Button>
-            <b>Add Company +</b>
+            <b>Click to add Work Order +</b>
           </Button>
         </Link>
-        <span style={{ marginLeft: "15px" }}>
-          <Button>
-            <b>Delete Selected Company -</b>
-          </Button>
-        </span>
       </div>
-      <Table {...tableProps} columns={tableColumns} dataSource={dataList} />
+      <Table
+        {...tableProps}
+        columns={tableColumns}
+        // dataSource={hasData ? data : []}
+        scroll={scroll}
+      />
     </>
   );
 };
 
-export default CompanyList;
+export default WorkOrder;

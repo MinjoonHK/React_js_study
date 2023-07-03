@@ -15,6 +15,10 @@ import UserProfile from "../../components/UserProfile";
 import jwtDecode from "jwt-decode";
 import DailyEnergyPerformance from "../../components/DailyEnergyPerformance";
 import MonthlyEnergyPerformance from "../../components/MonthlyEnergyPerformance";
+import WorkOrder from "../../components/WorkOrder";
+import AddWorkOrder from "../../components/WorkorderAdd";
+import UserList from "../../components/UserList";
+import Settings from "../../components/Settings";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -39,19 +43,29 @@ const items: MenuProps["items"] = [
     link: "/MonthlyenergyPerformance",
   },
   {
-    label: "Work Order",
-    key: "/map", //key name should be uniform
-    link: "/map",
-  },
-  {
-    label: "Registered Companies",
-    key: "/Company", //key name should be uniform
-    link: "/companylist",
-  },
-  {
     label: "See in Map",
     key: "/map", //key name should be uniform
     link: "/map",
+  },
+  {
+    label: "Work Order",
+    key: "/WorkOrder", //key name should be uniform
+    link: "/workorder",
+  },
+  {
+    label: "Registered Companies",
+    key: "/CompanyList", //key name should be uniform
+    link: "/companylist",
+  },
+  {
+    label: "Registered Users",
+    key: "/UserList", //key name should be uniform
+    link: "/userlist",
+  },
+  {
+    label: "Settings",
+    key: "/settings", //key name should be uniform
+    link: "/settings",
   },
 ].map((item, index) => ({
   key: String(index + 1),
@@ -216,9 +230,13 @@ const Dashboard: React.FC = () => {
                   path="/energyPerformance"
                   element={<EnergyPerformance />}
                 ></Route>
+                <Route path="/workorder" element={<WorkOrder />}></Route>
+                <Route path="/settings" element={<Settings />}></Route>
                 <Route path="/companylist" element={<CompanyList />}></Route>
+                <Route path="/userlist" element={<UserList />}></Route>
                 <Route path="/map" element={<Pagemap />}></Route>
-                <Route path="/addCompany" element={<AddCompany />}></Route>
+                <Route path="/addcompany" element={<AddCompany />}></Route>
+                <Route path="/addworkorder" element={<AddWorkOrder />}></Route>
                 <Route
                   path="/userinformation"
                   element={<UserProfile />}

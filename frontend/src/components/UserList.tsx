@@ -8,17 +8,17 @@ import { Link } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Company Name",
+    title: "User Name",
     dataIndex: "Name",
     align: "center",
   },
   {
-    title: "Address",
+    title: "Role",
     dataIndex: "Address",
     align: "center",
   },
   {
-    title: "Owner",
+    title: "Company",
     dataIndex: "Owner",
     align: "center",
   },
@@ -36,7 +36,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const CompanyList: React.FC = () => {
+const UserList: React.FC = () => {
   const [dataList, setDataList] = useState<DataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [bordered, setBordered] = useState(false);
@@ -63,7 +63,6 @@ const CompanyList: React.FC = () => {
   }, []);
 
   const tableColumns = columns.map((item) => ({ ...item, ellipsis }));
-
   const tableProps: TableProps<DataType> = {
     bordered,
     loading,
@@ -78,12 +77,12 @@ const CompanyList: React.FC = () => {
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
         <Link to="/addCompany">
           <Button>
-            <b>Add Company +</b>
+            <b>Add User +</b>
           </Button>
         </Link>
         <span style={{ marginLeft: "15px" }}>
           <Button>
-            <b>Delete Selected Company -</b>
+            <b>Delete Selected User -</b>
           </Button>
         </span>
       </div>
@@ -92,4 +91,4 @@ const CompanyList: React.FC = () => {
   );
 };
 
-export default CompanyList;
+export default UserList;

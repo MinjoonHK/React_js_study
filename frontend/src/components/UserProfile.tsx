@@ -1,6 +1,5 @@
 import { Card } from "antd";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 
 const UserInformation: React.FC = () => {
@@ -8,11 +7,10 @@ const UserInformation: React.FC = () => {
 
   const getUserInfo = async (token: any) => {
     try {
-      const decodedToken: any = jwtDecode(token);
       const response = await axios.get("/dashboard/userinformation", {
-        params: { Email: decodedToken.Email },
+        params: { Token: token },
       });
-      console.log(response);
+      console.log(response.data);
       setUserInfo(response.data);
     } catch (error) {
       console.log(error);
@@ -28,7 +26,6 @@ const UserInformation: React.FC = () => {
     <div
       style={{
         display: "flex",
-        margin: "150px",
         justifyContent: "center",
       }}
     >
@@ -36,15 +33,22 @@ const UserInformation: React.FC = () => {
         title={<div style={{ fontSize: "25px" }}>User Information</div>}
         bordered={false}
         style={{
-          width: 500,
+          width: "100%",
           border: "gray solid 2px",
         }}
       >
         <div>
           {userInfo ? (
             <>
-              <p>{userInfo.LastName}</p>
-              <p>{userInfo.FirstName}</p>
+              <div>
+                <span>
+                  <p>
+                    First Name: {userInfo.FirstName} &nbsp; Last Name:{" "}
+                    {userInfo.LastName}
+                  </p>
+                </span>
+              </div>
+              <p></p>
               <p>{userInfo.Role}</p>
               <p>{userInfo.Email}</p>
             </>
