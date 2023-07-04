@@ -3,20 +3,20 @@ import axios from "axios";
 export interface DataType {
   key: React.Key;
   ID: number;
-  Owner: string;
-  Address?: string;
-  Name?: string;
-  contact?: string;
+  FirstName?: string;
+  Email?: string;
+  isActive?: string;
+  PhoneNumber?: string;
   Created_at?: string;
-  maintainence?: string;
+  Company?: string;
+  Role?: string;
 }
 export const data = async (): Promise<DataType[]> => {
-  const response = await axios.get<DataType[]>("/dashboard/companylist");
+  const response = await axios.get<DataType[]>("/dashboard/userlist");
+  console.log(response.data);
   const newData: DataType[] = response.data.map((item) => ({
     ...item,
     key: item.ID,
-    value: item.Name,
-    label: item.Name,
     Created_at: formatDate(item.Created_at),
   }));
   return newData;

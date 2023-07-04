@@ -2,9 +2,10 @@ import { ColumnsType } from "antd/es/table";
 import DemoColumn from "./DemoColumn";
 import DemoGauge from "./DemoGauge";
 import DemoLine from "./DemoLine";
-import { Input, Space, Table, Tag } from "antd";
-import axios from "axios";
-import { useState } from "react";
+import { RollbackOutlined } from "@ant-design/icons";
+import { Input, Space, Select, Table, Tag, Button } from "antd";
+import { DataType, data } from "../data/SiteList";
+import { useEffect, useState } from "react";
 
 interface table {
   key: number;
@@ -14,130 +15,108 @@ interface table {
   tags: string;
 }
 
+const columns: ColumnsType<table> = [
+  {
+    title: "Serial Number",
+    dataIndex: "name",
+    key: "key",
+    align: "center",
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: "Average Monthly Power Generation (KWH)",
+    dataIndex: "age",
+    key: "age",
+    align: "center",
+  },
+  {
+    title: "Total Power Generation (KWH)",
+    dataIndex: "address",
+    key: "address",
+    align: "center",
+  },
+  {
+    title: "AC voltage (Vac)",
+    dataIndex: "address",
+    key: "address",
+    align: "center",
+  },
+  {
+    title: "Status",
+    key: "tags",
+    dataIndex: "tags",
+    align: "center",
+    render: (_, { tags }) => (
+      <>
+        {tags === "OK" && (
+          <Tag color="success" key={tags}>
+            {tags}
+          </Tag>
+        )}
+        {tags === "WARNING" && (
+          <Tag color="warning" key={tags}>
+            {tags}
+          </Tag>
+        )}
+        {tags === "ERROR" && (
+          <Tag color="error" key={tags}>
+            {tags}
+          </Tag>
+        )}
+      </>
+    ),
+  },
+];
+
 function EnergyPerformance() {
-  const { Search } = Input;
   const [searchCompany, setSearchCompnay] = useState("");
-  const onSearch = (value: string) => setSearchCompnay(value);
+  const [nameList, setNameList] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const onChange = (value: string) => setSearchCompnay(value);
+  const options = nameList.map((name) => ({
+    value: name,
+    label: name,
+  }));
 
-  const columns: ColumnsType<table> = [
-    {
-      title: "Serial Number",
-      dataIndex: "name",
-      key: "key",
-      align: "center",
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
-      align: "center",
-    },
-    {
-      title: "Average Monthly Power Generation (KWH)",
-      dataIndex: "age",
-      key: "age",
-      align: "center",
-    },
-    {
-      title: "Total Power Generation (KWH)",
-      dataIndex: "address",
-      key: "address",
-      align: "center",
-    },
-    {
-      title: "AC voltage (Vac)",
-      dataIndex: "address",
-      key: "address",
-      align: "center",
-    },
-    {
-      title: "Status",
-      key: "tags",
-      dataIndex: "tags",
-      align: "center",
-      render: (_, { tags }) => (
-        <>
-          {tags === "OK" && (
-            <Tag color="success" key={tags}>
-              {tags}
-            </Tag>
-          )}
-          {tags === "WARNING" && (
-            <Tag color="warning" key={tags}>
-              {tags}
-            </Tag>
-          )}
-          {tags === "ERROR" && (
-            <Tag color="error" key={tags}>
-              {tags}
-            </Tag>
-          )}
-        </>
-      ),
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await data();
+        const locations = result.map((item) => item.Location);
+        setNameList(locations);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const data: table[] = [
-    {
-      key: 1,
-      name: "ABC",
-      age: 32,
-      address: "New York No. 1 Lake Park",
-      tags: "OK",
-    },
-    {
-      key: 2,
-      name: "CDE",
-      age: 42,
-      address: "London No. 1 Lake Park",
-      tags: "WARNING",
-    },
-    {
-      key: 3,
-      name: "EFG",
-      age: 32,
-      address: "Sydney No. 1 Lake Park",
-      tags: "ERROR",
-    },
-  ];
+    fetchData();
+  }, []);
+  function changeState() {
+    setSearchCompnay("");
+  }
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "left",
-          marginTop: "0.5%",
-          marginBottom: "2%",
-        }}
-      >
-        <Search
-          placeholder="input Company Name"
-          style={{ width: "350px" }}
-          allowClear
-          enterButton="Search"
-          size="middle"
-          onSearch={onSearch}
-        />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          fontWeight: "bold",
-          fontSize: "20px",
-          marginBottom: "4%",
-        }}
-      >
-        {searchCompany ? (
-          <div>Overall Performace of {searchCompany}</div>
-        ) : (
-          <div>Please Search Company</div>
-        )}
-      </div>
-      <Table columns={columns} dataSource={data} pagination={false} />
-      <div>
-        {/* <div>
+      {searchCompany ? (
+        <div>
+          <div style={{ width: "100%", textAlign: "left" }}>
+            <Button onClick={changeState}>Back to search</Button>
+          </div>
+          <div style={{ fontWeight: "bold", fontSize: "20px" }}>
+            Overall Performace at {searchCompany}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontWeight: "bold",
+              fontSize: "20px",
+              marginBottom: "4%",
+            }}
+          ></div>
+          <Table columns={columns} pagination={false} />
+          <div>
+            {/* <div>
           <DemoLine />
         </div>
         <div>
@@ -155,7 +134,21 @@ function EnergyPerformance() {
         <div>
           <DemoGauge />
         </div> */}
-      </div>
+          </div>
+        </div>
+      ) : (
+        <Select
+          showSearch
+          style={{ width: "500px" }}
+          placeholder="Select or Search Site Name"
+          optionFilterProp="children"
+          onChange={onChange}
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          options={options}
+        />
+      )}
     </div>
   );
 }

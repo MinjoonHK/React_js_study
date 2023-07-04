@@ -19,6 +19,7 @@ import WorkOrder from "../../components/WorkOrder";
 import AddWorkOrder from "../../components/WorkorderAdd";
 import UserList from "../../components/UserList";
 import Settings from "../../components/Settings";
+import DeviceInfo from "../../components/DeviceInfo";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -43,6 +44,11 @@ const items: MenuProps["items"] = [
     link: "/MonthlyenergyPerformance",
   },
   {
+    label: "Device Information",
+    key: "/deviceinfo", //key name should be uniform
+    link: "/deviceinfo",
+  },
+  {
     label: "See in Map",
     key: "/map", //key name should be uniform
     link: "/map",
@@ -62,6 +68,7 @@ const items: MenuProps["items"] = [
     key: "/UserList", //key name should be uniform
     link: "/userlist",
   },
+
   {
     label: "Settings",
     key: "/settings", //key name should be uniform
@@ -235,6 +242,7 @@ const Dashboard: React.FC = () => {
                 <Route path="/companylist" element={<CompanyList />}></Route>
                 <Route path="/userlist" element={<UserList />}></Route>
                 <Route path="/map" element={<Pagemap />}></Route>
+                <Route path="/deviceinfo" element={<DeviceInfo />}></Route>
                 <Route path="/addcompany" element={<AddCompany />}></Route>
                 <Route path="/addworkorder" element={<AddWorkOrder />}></Route>
                 <Route

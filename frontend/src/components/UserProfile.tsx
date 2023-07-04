@@ -10,7 +10,6 @@ const UserInformation: React.FC = () => {
       const response = await axios.get("/dashboard/userinformation", {
         params: { Token: token },
       });
-      console.log(response.data);
       setUserInfo(response.data);
     } catch (error) {
       console.log(error);
