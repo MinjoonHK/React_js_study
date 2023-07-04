@@ -44,3 +44,25 @@ export async function getCompanyList() {
     return null;
   }
 }
+
+export async function getUserList() {
+  try {
+    let [users] = await pool.query(
+      "SELECT ID, FirstName, PhoneNumber, isActive, Email, Created_at, Role, Company FROM user"
+    );
+    return users;
+  } catch (err) {
+    console.error(new Date(), "getComapnyList", err);
+    return null;
+  }
+}
+
+export async function getsiteList() {
+  try {
+    let [users] = await pool.query("SELECT Location FROM site");
+    return users;
+  } catch (err) {
+    console.error(new Date(), "getComapnyList", err);
+    return null;
+  }
+}

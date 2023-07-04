@@ -5,6 +5,8 @@ import {
   addCompanyManager,
   getUserProfile,
   getCompanyList,
+  getUserList,
+  getsiteList,
 } from "../managers/dashboard.manager";
 import jwtDecode from "jwt-decode";
 
@@ -39,6 +41,26 @@ dashboardRouter.get("/monthlyperformance", async (req, res) => {
 dashboardRouter.get("/companylist", async (req, res) => {
   try {
     const result = await getCompanyList();
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+dashboardRouter.get("/sitelist", async (req, res) => {
+  try {
+    const result = await getsiteList();
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+dashboardRouter.get("/userlist", async (req, res) => {
+  try {
+    const result = await getUserList();
     res.json(result);
   } catch (error) {
     console.error(error);
