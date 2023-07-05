@@ -6,7 +6,7 @@ import {
   getUserProfile,
   getCompanyList,
   getUserList,
-  getsiteList,
+  getSiteList,
 } from "../managers/dashboard.manager";
 import jwtDecode from "jwt-decode";
 
@@ -50,7 +50,7 @@ dashboardRouter.get("/companylist", async (req, res) => {
 
 dashboardRouter.get("/sitelist", async (req, res) => {
   try {
-    const result = await getsiteList();
+    const result = await getSiteList();
     res.json(result);
   } catch (error) {
     console.error(error);

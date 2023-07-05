@@ -57,9 +57,22 @@ export async function getUserList() {
   }
 }
 
-export async function getsiteList() {
+export async function getSiteList() {
   try {
-    let [users] = await pool.query("SELECT Location FROM site");
+    let [users] = await pool.query("SELECT LocationName FROM site");
+    return users;
+  } catch (err) {
+    console.error(new Date(), "getComapnyList", err);
+    return null;
+  }
+}
+
+export async function getPerformanceInfo() {
+  try {
+    let [users] = await pool.query(
+      "SELECT Serial_Number, Status FROM devices WHERE Location =?",
+      [Location]
+    );
     return users;
   } catch (err) {
     console.error(new Date(), "getComapnyList", err);
