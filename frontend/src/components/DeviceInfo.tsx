@@ -81,7 +81,7 @@ const DeviceInfo: React.FC = () => {
   return (
     <>
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
-        <Link to="/addCompany">
+        <Link to="/addDevice">
           <Button>
             <b>Add Device +</b>
           </Button>

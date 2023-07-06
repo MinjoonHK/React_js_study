@@ -4,7 +4,8 @@ import { DownOutlined } from "@ant-design/icons";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { DataType, data } from "../data/UserList";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [
   {
@@ -76,6 +77,7 @@ const userDropdown: MenuProps["items"] = [
 ];
 
 const UserList: React.FC = () => {
+  const navigate = useNavigate();
   const [dataList, setDataList] = useState<DataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [bordered, setBordered] = useState(false);
@@ -109,6 +111,18 @@ const UserList: React.FC = () => {
     tableLayout,
   };
 
+  const DeactivateUser = async (token: any) => {
+    try {
+      console.log(selectedRowKeys);
+      await axios.post("/dashboard/userlist", {
+        params: { DeactivateUserList: selectedRowKeys },
+      });
+      navigate("/userlist");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
@@ -124,7 +138,7 @@ const UserList: React.FC = () => {
           <b>Activate Selected User</b>
         </Button>
         <span style={{ marginLeft: "15px" }}>
-          <Button>
+          <Button onClick={DeactivateUser}>
             <b>Deactivate Selected User</b>
           </Button>
         </span>

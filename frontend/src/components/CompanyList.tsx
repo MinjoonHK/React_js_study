@@ -5,6 +5,7 @@ import type { ColumnsType, TableProps } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
 import { DataType, data } from "../data/CompanyList";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const columns: ColumnsType<DataType> = [
   {

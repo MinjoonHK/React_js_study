@@ -1,22 +1,28 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 
-interface SearchState {
+export interface AppState {
   searchCompany: string;
 }
 
-const initialState: SearchState = {
+const initialState: AppState = {
+  //initial state of [searchCompany, setSearchCompany] = useState('')
   searchCompany: "",
 };
 
-const searchSlice = createSlice({
-  name: "search",
-  initialState,
+const searchCompanySlice = createSlice({
+  name: "searchCompany",
+  initialState, // useState('')
   reducers: {
-    setSearchCompany(state, action: PayloadAction<string>) {
+    setSearchCompany: (state, action) => {
       state.searchCompany = action.payload;
     },
   },
 });
 
-export const { setSearchCompany } = searchSlice.actions;
-export default searchSlice.reducer;
+export const { setSearchCompany } = searchCompanySlice.actions;
+
+export const store = configureStore({
+  reducer: {
+    searchCompany: searchCompanySlice.reducer,
+  },
+});

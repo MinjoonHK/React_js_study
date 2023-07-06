@@ -5,21 +5,20 @@ import {
   DownOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Layout, Menu, theme, Button, Input, Dropdown, Space } from "antd";
-import { Link, NavLink, Route, Routes } from "react-router-dom";
+import { Layout, Menu, theme, Button, Dropdown, Space } from "antd";
+import { Link, NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import EnergyPerformance from "../../components/EnergyPerformance";
 import Pagemap from "../../components/Pagemap";
 import CompanyList from "../../components/CompanyList";
 import AddCompany from "../../components/CompanyAdd";
 import UserProfile from "../../components/UserProfile";
 import jwtDecode from "jwt-decode";
-import DailyEnergyPerformance from "../../components/DailyEnergyPerformance";
-import MonthlyEnergyPerformance from "../../components/MonthlyEnergyPerformance";
 import WorkOrder from "../../components/WorkOrder";
 import AddWorkOrder from "../../components/WorkorderAdd";
 import UserList from "../../components/UserList";
 import Settings from "../../components/Settings";
 import DeviceInfo from "../../components/DeviceInfo";
+import AddDevice from "../../components/DeviceAdd";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -29,19 +28,9 @@ function logout() {
 
 const items: MenuProps["items"] = [
   {
-    label: "Overall Peroformance",
+    label: "Performance",
     key: "/Performance", //key name should be uniform
     link: "/energyPerformance",
-  },
-  {
-    label: "Daily Performance",
-    key: "/DailyPerformance", //key name should be uniform
-    link: "/DailyenergyPerformance",
-  },
-  {
-    label: "Monthly Performance",
-    key: "/MonthlyPerformance", //key name should be uniform
-    link: "/MonthlyenergyPerformance",
   },
   {
     label: "Device Information",
@@ -113,20 +102,29 @@ interface decodedToken {
   Email: string;
   Name: string;
   Role: string;
+  iat: number;
+  exp: number;
 }
 
 const Dashboard: React.FC = () => {
   const [greeting, setGreeting] = useState("");
   const [firstName, setFirstName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
+    const decoded: decodedToken = jwtDecode(token);
+    const hour = new Date().getHours();
+    const currentTime: number = Date.now();
+    const expirationTime: number = new Date(decoded.exp * 1000).getTime();
+    if (currentTime > expirationTime) {
+      navigate("/login");
+      setTimeout(() => logout(), 100);
+    }
     if (token) {
-      const decoded: decodedToken = jwtDecode(token);
       const greetingName = decoded.Name;
       setFirstName(greetingName);
     }
-    const hour = new Date().getHours();
     if (hour < 12) {
       setGreeting("Good Morning!");
     } else if (hour < 18) {
@@ -244,18 +242,11 @@ const Dashboard: React.FC = () => {
                 <Route path="/map" element={<Pagemap />}></Route>
                 <Route path="/deviceinfo" element={<DeviceInfo />}></Route>
                 <Route path="/addcompany" element={<AddCompany />}></Route>
+                <Route path="/addDevice" element={<AddDevice />}></Route>
                 <Route path="/addworkorder" element={<AddWorkOrder />}></Route>
                 <Route
                   path="/userinformation"
                   element={<UserProfile />}
-                ></Route>
-                <Route
-                  path="/dailyEnergyPerformance"
-                  element={<DailyEnergyPerformance />}
-                ></Route>
-                <Route
-                  path="/monthlyEnergyPerformance"
-                  element={<MonthlyEnergyPerformance />}
                 ></Route>
               </Routes>
             }

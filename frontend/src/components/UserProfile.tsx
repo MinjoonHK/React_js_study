@@ -33,7 +33,7 @@ const UserInformation: React.FC = () => {
         bordered={false}
         style={{
           width: "100%",
-          border: "gray solid 2px",
+          border: "solid rgb(226, 226, 226) 1.5px",
         }}
       >
         <div>

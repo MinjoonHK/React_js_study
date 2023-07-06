@@ -8,14 +8,14 @@ import { Link } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "ID",
-    dataIndex: "key",
-    align: "center",
-  },
-  {
     title: "CompanyName",
     dataIndex: "CompanyName",
     align: "center",
+  },
+  {
+    title: "Contact",
+    align: "center",
+    dataIndex: "contact",
   },
   {
     title: "Address",
@@ -23,16 +23,35 @@ const columns: ColumnsType<DataType> = [
     align: "center",
   },
   {
-    title: "Last maintainance date",
+    title: "Work Order Summary",
     align: "center",
     dataIndex: "maintainence",
-    sorter: (a, b) =>
-      new Date(a.maintainence).valueOf() - new Date(b.maintainence).valueOf(),
   },
+
   {
-    title: "Contact",
+    title: "Manager",
     align: "center",
     dataIndex: "contact",
+  },
+  {
+    title: "Manager Contact",
+    align: "center",
+    dataIndex: "contact",
+  },
+  {
+    title: "Status",
+    key: "isActive",
+    dataIndex: "isActive",
+    align: "center",
+    // render: (_, { isActive }) => (
+    //   <>
+    //     {isActive === "Active" && (
+    //       <Tag color="success" key={isActive}>
+    //         {isActive}
+    //       </Tag>
+    //     )}
+    //   </>
+    // ),
   },
 ];
 

@@ -1,90 +1,44 @@
-import { ColumnsType } from "antd/es/table";
 import DemoColumn from "./DemoColumn";
 import DemoGauge from "./DemoGauge";
 import DemoLine from "./DemoLine";
-import { RollbackOutlined } from "@ant-design/icons";
-import { Input, Space, Select, Table, Tag, Button } from "antd";
-import { DataType, data } from "../data/SiteList";
+import { Select, Table, Tag, Button, Tabs } from "antd";
+import { data } from "../data/SiteList";
 import { useEffect, useState } from "react";
-
-interface table {
-  key: number;
-  name: string;
-  age: number;
-  address: string;
-  tags: string;
-}
-
-const columns: ColumnsType<table> = [
-  {
-    title: "Serial Number",
-    dataIndex: "name",
-    key: "key",
-    align: "center",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Average Monthly Power Generation (KWH)",
-    dataIndex: "age",
-    key: "age",
-    align: "center",
-  },
-  {
-    title: "Total Power Generation (KWH)",
-    dataIndex: "address",
-    key: "address",
-    align: "center",
-  },
-  {
-    title: "AC voltage (Vac)",
-    dataIndex: "address",
-    key: "address",
-    align: "center",
-  },
-  {
-    title: "Status",
-    key: "tags",
-    dataIndex: "tags",
-    align: "center",
-    render: (_, { tags }) => (
-      <>
-        {tags === "OK" && (
-          <Tag color="success" key={tags}>
-            {tags}
-          </Tag>
-        )}
-        {tags === "WARNING" && (
-          <Tag color="warning" key={tags}>
-            {tags}
-          </Tag>
-        )}
-        {tags === "ERROR" && (
-          <Tag color="error" key={tags}>
-            {tags}
-          </Tag>
-        )}
-      </>
-    ),
-  },
-];
+import { overallColumns, overallColumns2 } from "../data/TableColumns/opTable";
+import { monthlyColumns } from "../data/TableColumns/mpTable";
+import { dailyColumns } from "../data/TableColumns/dpTable";
+import axios from "axios";
 
 function EnergyPerformance() {
   const [searchCompany, setSearchCompnay] = useState("");
   const [nameList, setNameList] = useState([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const onChange = (value: string) => setSearchCompnay(value);
+  const [dataList, setDataList] = useState([]);
+  const onChange = (value: string) => {
+    setSearchCompnay(value);
+    getPerformanceData(value);
+  };
   const options = nameList.map((name) => ({
     value: name,
     label: name,
   }));
 
+  const getPerformanceData = async (searchCompany) => {
+    try {
+      const response = await axios.get(`/dashboard/performance`, {
+        params: { Location: searchCompany },
+      });
+      setDataList(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await data();
-        const locations = result.map((item) => item.Location);
+        const locations = result.map((item) => item.LocationName);
         setNameList(locations);
-        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -102,21 +56,93 @@ function EnergyPerformance() {
           <div style={{ width: "100%", textAlign: "left" }}>
             <Button onClick={changeState}>Back to search</Button>
           </div>
-          <div style={{ fontWeight: "bold", fontSize: "20px" }}>
-            Overall Performace at {searchCompany}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              fontWeight: "bold",
-              fontSize: "20px",
-              marginBottom: "4%",
-            }}
-          ></div>
-          <Table columns={columns} pagination={false} />
-          <div>
-            {/* <div>
+          <Tabs
+            defaultActiveKey="1"
+            centered
+            items={[
+              {
+                label: (
+                  <div style={{ fontWeight: "bold" }}>Overall Performance</div>
+                ),
+                key: "1",
+                children: (
+                  <div>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        marginBottom: "3%",
+                        marginTop: "3%",
+                      }}
+                    >
+                      Overall Performance at {searchCompany}
+                    </div>
+                    <Table
+                      columns={overallColumns}
+                      pagination={false}
+                      dataSource={dataList}
+                    />
+                    <Table
+                      style={{ marginTop: "5%" }}
+                      columns={overallColumns2}
+                      pagination={false}
+                    />
+                  </div>
+                ),
+              },
+              {
+                label: (
+                  <div style={{ fontWeight: "bold" }}>Monthly Performance</div>
+                ),
+                key: "2",
+                children: (
+                  <div>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        marginBottom: "3%",
+                        marginTop: "3%",
+                      }}
+                    >
+                      Monthly Energy Performance at {searchCompany}
+                    </div>
+                    <Table
+                      columns={monthlyColumns}
+                      pagination={false}
+                      dataSource={dataList}
+                    />
+                  </div>
+                ),
+              },
+              {
+                label: (
+                  <div style={{ fontWeight: "bold" }}>Daily Performance</div>
+                ),
+                key: "3",
+                children: (
+                  <div>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        marginBottom: "3%",
+                        marginTop: "3%",
+                      }}
+                    >
+                      Daily Energy Performance at {searchCompany}
+                    </div>
+                    <Table
+                      columns={dailyColumns}
+                      pagination={false}
+                      dataSource={dataList}
+                    />
+                  </div>
+                ),
+              },
+            ]}
+          />
+          {/* <div>
           <DemoLine />
         </div>
         <div>
@@ -134,7 +160,6 @@ function EnergyPerformance() {
         <div>
           <DemoGauge />
         </div> */}
-          </div>
         </div>
       ) : (
         <Select

@@ -3,19 +3,15 @@ import axios from "axios";
 export interface DataType {
   key: React.Key;
   ID: number;
-  Owner: string;
-  Address?: string;
-  Name?: string;
-  contact?: string;
-  Created_at?: string;
-  maintainence?: string;
+  LocationName: string;
 }
-
 export const data = async (): Promise<DataType[]> => {
-  const response = await axios.get<DataType[]>("/dashboard/performance");
+  const response = await axios.get<DataType[]>("/dashboard/sitelist");
   const newData: DataType[] = response.data.map((item) => ({
     ...item,
     key: item.ID,
+    value: item.LocationName,
+    label: item.LocationName,
   }));
   return newData;
 };

@@ -13,7 +13,6 @@ export interface DataType {
 }
 export const data = async (): Promise<DataType[]> => {
   const response = await axios.get<DataType[]>("/dashboard/userlist");
-  console.log(response.data);
   const newData: DataType[] = response.data.map((item) => ({
     ...item,
     key: item.ID,
