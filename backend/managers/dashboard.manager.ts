@@ -67,10 +67,10 @@ export async function getSiteList() {
   }
 }
 
-export async function getPerformanceInfo() {
+export async function getPerformanceInfo(Location: string) {
   try {
     let [users] = await pool.query(
-      "SELECT Serial_Number, Status FROM devices WHERE Location =?",
+      "SELECT Serial_Number, Status FROM devices WHERE LocationName = ?",
       [Location]
     );
     return users;

@@ -2,7 +2,7 @@ import { randomBytes, timingSafeEqual, scryptSync } from "crypto";
 import { User } from "../models/usermodel";
 import jwt from "jsonwebtoken";
 import { pool } from "../db/db";
-
+import config from "config";
 const TAG = "UserManager";
 class UserManager {
   async findUserByEmail(email: string): Promise<User | null> {
@@ -66,8 +66,8 @@ class UserManager {
         Name: user.FirstName,
         Role: user.Role,
       },
-      "1DI0MXbI4PtymqIILPcQQJun2QjCSXHo6KyzCiqHgHDBhIyTZ1OvBASYOA5XMmZnMSPKEVkpnWmJRjVmCLMdRHasLd991gPs61_nQkTNjbygPI3049xZUaoN8h8JmOnP80vaPOC9dhnf0Aizdxzmo9HVX6VggSG98VRv_QQcTt0",
-      { expiresIn: "20m" }
+      config.get("jwt.passphase")!,
+      { expiresIn: "5h" }
     );
   };
 

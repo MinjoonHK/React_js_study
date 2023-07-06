@@ -7,36 +7,11 @@ import {
   getCompanyList,
   getUserList,
   getSiteList,
+  getPerformanceInfo,
 } from "../managers/dashboard.manager";
 import jwtDecode from "jwt-decode";
 
 const dashboardRouter = express.Router();
-dashboardRouter.get("/overallperformance", async (req, res) => {
-  try {
-    res.json({ message: "Hello!" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-dashboardRouter.get("/dailyperformance", async (req, res) => {
-  try {
-    res.json({ message: "Hello!" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
-
-dashboardRouter.get("/monthlyperformance", async (req, res) => {
-  try {
-    res.json({ message: "Hello!" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-});
 
 dashboardRouter.get("/companylist", async (req, res) => {
   try {
@@ -51,6 +26,17 @@ dashboardRouter.get("/companylist", async (req, res) => {
 dashboardRouter.get("/sitelist", async (req, res) => {
   try {
     const result = await getSiteList();
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+dashboardRouter.get("/performance", async (req, res) => {
+  const Location = req.query.Location as string;
+  try {
+    const result = await getPerformanceInfo(Location);
     res.json(result);
   } catch (error) {
     console.error(error);
