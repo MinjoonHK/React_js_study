@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, Dropdown, MenuProps, Space, Table, Tag } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Button, Table, Tag } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { DataType, data } from "../data/UserList";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
 const columns: ColumnsType<DataType> = [
   {
     title: "User Name",
@@ -17,6 +14,18 @@ const columns: ColumnsType<DataType> = [
     title: "Role",
     dataIndex: "Role",
     align: "center",
+    filters: [
+      {
+        text: "User",
+        value: "User",
+      },
+      {
+        text: "Admin",
+        value: "Admin",
+      },
+    ],
+
+    onFilter: (value: string, record) => record.Role.indexOf(value) === 0,
   },
   {
     title: "Company",
@@ -45,10 +54,27 @@ const columns: ColumnsType<DataType> = [
     key: "isActive",
     dataIndex: "isActive",
     align: "center",
+    filters: [
+      {
+        text: "Active",
+        value: "Active",
+      },
+      {
+        text: "Deactivated",
+        value: "Deactivated",
+      },
+    ],
+
+    onFilter: (value: string, record) => record.isActive.indexOf(value) === 0,
     render: (_, { isActive }) => (
       <>
         {isActive === "Active" && (
           <Tag color="success" key={isActive}>
+            {isActive}
+          </Tag>
+        )}
+        {isActive === "Deactivated" && (
+          <Tag color="error" key={isActive}>
             {isActive}
           </Tag>
         )}
@@ -57,34 +83,13 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const userDropdown: MenuProps["items"] = [
-  {
-    label: (
-      <div style={{ fontWeight: "bold", textDecoration: "none" }}>
-        Activate Selected User
-      </div>
-    ),
-    key: "0",
-  },
-  {
-    label: (
-      <div style={{ fontWeight: "bold", textDecoration: "none" }}>
-        Deactivate Selected User
-      </div>
-    ),
-    key: "1",
-  },
-];
-
 const UserList: React.FC = () => {
-  const navigate = useNavigate();
   const [dataList, setDataList] = useState<DataType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [bordered, setBordered] = useState(false);
-  const [size, setSize] = useState<SizeType>("large");
-  const [showHeader, setShowHeader] = useState(true);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
+  const [size, setSize] = useState<SizeType>("large");
+  const [bordered, setBordered] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
   const [tableLayout, setTableLayout] = useState();
   const [ellipsis, setEllipsis] = useState(false);
 
@@ -111,13 +116,27 @@ const UserList: React.FC = () => {
     tableLayout,
   };
 
-  const DeactivateUser = async (token: any) => {
+  const DeactivateUser = async () => {
     try {
-      console.log(selectedRowKeys);
-      await axios.post("/dashboard/userlist", {
+      const res = await axios.post("/dashboard/deactivateuser", {
         params: { DeactivateUserList: selectedRowKeys },
       });
-      navigate("/userlist");
+      if (res.status == 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ActivateUser = async () => {
+    try {
+      const res = await axios.post("/dashboard/activateuser", {
+        params: { ActivateUserList: selectedRowKeys },
+      });
+      if (res.status == 200) {
+        window.location.reload();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +153,7 @@ const UserList: React.FC = () => {
   return (
     <>
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
-        <Button>
+        <Button onClick={ActivateUser}>
           <b>Activate Selected User</b>
         </Button>
         <span style={{ marginLeft: "15px" }}>

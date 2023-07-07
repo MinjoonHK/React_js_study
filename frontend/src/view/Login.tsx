@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import jwtDecode from "jwt-decode";
 
 interface LoginForm {
   email: any;

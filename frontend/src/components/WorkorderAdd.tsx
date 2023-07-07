@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Form, Input, Card, DatePicker } from "antd";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import TextArea from "antd/es/input/TextArea";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 type SizeType = Parameters<typeof Form>[0]["size"];
 
 const AddWorkOrder: React.FC = () => {
   const navigate = useNavigate();
+
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default"
   );
@@ -68,39 +70,12 @@ const AddWorkOrder: React.FC = () => {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Company"
-              name="company"
-              rules={[
-                { required: true, message: "Please input your Company Name!" },
-              ]}
-            >
-              <Input size="large" />
-            </Form.Item>
-            <Form.Item
-              label="Phone Number"
-              name="phoneNumber"
-              rules={[
-                { required: true, message: "Please input the Phone Number!" },
-              ]}
-            >
-              <Input size="large" />
-            </Form.Item>
-            <Form.Item
-              label="Address"
-              name="address"
-              rules={[{ required: true, message: "Please input the Address!" }]}
-            >
-              <Input size="large" />
-            </Form.Item>
-            <Form.Item
               label="Order Summary"
               name="ordersummary"
               rules={[
                 { required: true, message: "Please input your order summary!" },
               ]}
-            >
-              <TextArea rows={4} />
-            </Form.Item>
+            ></Form.Item>
             <Form.Item
               label="Start Date"
               name="DatePicker"

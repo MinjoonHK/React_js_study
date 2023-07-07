@@ -66,13 +66,13 @@ export const overallColumns: ColumnsType<OverallPerformanceTable> = [
 
 export const overallColumns2: ColumnsType<OverallPerformanceTable> = [
   {
-    title: "Total Average Monthly Power Generation (KWH)",
+    title: "Total Average Daily Power Generation (KWH)",
     dataIndex: "age",
     key: "age",
     align: "center",
   },
   {
-    title: "Total Average Daily Power Generation (KWH)",
+    title: "Total Average Monthly Power Generation (KWH)",
     dataIndex: "age",
     key: "age",
     align: "center",
