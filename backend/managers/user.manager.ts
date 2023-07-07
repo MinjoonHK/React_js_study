@@ -21,6 +21,9 @@ class UserManager {
   async login(username: string, password: string) {
     const user = await this.findUserByEmail(username);
     if (user) {
+      if (user.isActive === "Deactivated") {
+        return { success: false, error: "user_is_deactivated" };
+      }
       let passwordpass = await this.comparePassword(user.Password, password);
       if (passwordpass) {
         return { success: true, data: this.generateAccessToken(user) };

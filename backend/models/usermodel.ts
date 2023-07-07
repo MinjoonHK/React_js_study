@@ -9,4 +9,5 @@ export interface User {
   PhoneNumber: string;
   Role: string;
   Company: string;
+  isActive: string;
 }

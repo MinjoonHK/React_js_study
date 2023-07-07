@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import { AddCompanyForm } from "../models/forms/addcompany.form";
+import { DeleteUser } from "../models/forms/deleteuser.form";
+import { ReactivateUser } from "../models/forms/activateuser.form";
 import { validate } from "class-validator";
 import {
   addCompanyManager,
@@ -8,6 +10,8 @@ import {
   getUserList,
   getSiteList,
   getPerformanceInfo,
+  deleteUserProfile,
+  ActivateUser,
 } from "../managers/dashboard.manager";
 import jwtDecode from "jwt-decode";
 
@@ -51,6 +55,50 @@ dashboardRouter.get("/userlist", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+dashboardRouter.post("/deactivateuser", async (req, res) => {
+  const ID = req.body.params.DeactivateUserList;
+  let form = new DeleteUser();
+  form.numbers = ID;
+  const errors = await validate(form);
+  if (errors.length > 0) {
+    //if there is error
+    res.status(400).json({
+      success: false,
+      error: "validation_error",
+      message: errors,
+    });
+    return;
+  }
+  let result = await deleteUserProfile(ID);
+  if (result) {
+    res.status(200).send("Successfully deleted user");
+  } else {
+    res.status(400).json("Failed to delete user");
+  }
+});
+
+dashboardRouter.post("/activateuser", async (req, res) => {
+  const ID = req.body.params.ActivateUserList;
+  let form = new ReactivateUser();
+  form.numbers = ID;
+  const errors = await validate(form);
+  if (errors.length > 0) {
+    //if there is error
+    res.status(400).json({
+      success: false,
+      error: "validation_error",
+      message: errors,
+    });
+    return;
+  }
+  let result = await ActivateUser(ID);
+  if (result) {
+    res.status(200).send("Successfully deleted user");
+  } else {
+    res.status(400).json("Failed to delete user");
   }
 });
 

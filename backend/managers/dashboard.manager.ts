@@ -19,6 +19,42 @@ export async function addCompanyManager(
   }
 }
 
+export async function deleteUserProfile(ID: number[]) {
+  try {
+    const query =
+      "UPDATE user SET isActive = 'Deactivated', deleted_at = NOW() WHERE isActive = 'Active' AND ID = ?";
+    let affectedRows = 0;
+    for (const id of ID) {
+      const result = await pool.query(query, id);
+      console.log(result);
+      affectedRows += result[0].affectedRows;
+      console.log(result);
+    }
+    console.log(affectedRows, "users have successfully deleted");
+    return affectedRows;
+  } catch (err) {
+    console.error(new Date(), "deleteUserProfile", err);
+    return 0;
+  }
+}
+
+export async function ActivateUser(ID: number[]) {
+  try {
+    const query =
+      "UPDATE user SET isActive = 'Active', deleted_at = null WHERE isActive = 'Deactivated' AND ID = ?";
+    let affectedRows = 0;
+    for (const id of ID) {
+      const result = await pool.query(query, id);
+      affectedRows += result[0].affectedRows;
+    }
+    console.log(affectedRows, "users have successfully Activated");
+    return affectedRows;
+  } catch (err) {
+    console.error(new Date(), "deleteUserProfile", err);
+    return 0;
+  }
+}
+
 export async function getUserProfile(email: string) {
   try {
     let [users, _] = (await pool.query(
@@ -47,10 +83,10 @@ export async function getCompanyList() {
 
 export async function getUserList() {
   try {
-    let [users] = await pool.query(
+    let [result] = await pool.query(
       "SELECT ID, FirstName, PhoneNumber, isActive, Email, Created_at, Role, Company FROM user"
     );
-    return users;
+    return result;
   } catch (err) {
     console.error(new Date(), "getComapnyList", err);
     return null;
@@ -59,8 +95,8 @@ export async function getUserList() {
 
 export async function getSiteList() {
   try {
-    let [users] = await pool.query("SELECT LocationName FROM site");
-    return users;
+    let [result] = await pool.query("SELECT LocationName FROM site");
+    return result;
   } catch (err) {
     console.error(new Date(), "getComapnyList", err);
     return null;
@@ -69,11 +105,13 @@ export async function getSiteList() {
 
 export async function getPerformanceInfo(Location: string) {
   try {
-    let [users] = await pool.query(
-      "SELECT Serial_Number, Status FROM devices WHERE LocationName = ?",
-      [Location]
-    );
-    return users;
+    const siteQuery = "SELECT ID from site WHERE LocationName = ?";
+    const [site] = await pool.query(siteQuery, [Location]);
+    const siteID = site[0].ID;
+    const resultQuery =
+      "SELECT Serial_Number, Status FROM devices WHERE site_ID = ?";
+    let [result] = await pool.query(resultQuery, [siteID]);
+    return result;
   } catch (err) {
     console.error(new Date(), "getComapnyList", err);
     return null;
