@@ -3,9 +3,15 @@ import { Button, Form, Input, Card, DatePicker } from "antd";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import TextArea from "antd/es/input/TextArea";
+import jwtDecode from "jwt-decode";
+import { decodedToken } from "../view/dashboard/Dashboard";
+import dayjs from "dayjs";
+import moment from "moment";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
+dayjs.extend(customParseFormat);
+const dateFormat = "YYYY/MM/DD";
 type SizeType = Parameters<typeof Form>[0]["size"];
 
 const AddWorkOrder: React.FC = () => {
@@ -18,17 +24,19 @@ const AddWorkOrder: React.FC = () => {
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
-  const onFinish = async ({ company, phoneNumber, address }) => {
+  const onFinish = async ({ ordersummary, DatePicker }) => {
     try {
-      const res = await axios.post("/dashboard/companylist/addworkorder", {
-        company,
-        phoneNumber,
-        address,
+      const decoded: decodedToken = jwtDecode(localStorage.getItem("jwt"));
+      const ID: number = decoded.ID;
+      const res = await axios.post("/dashboard/workorder/addworkorder", {
+        ordersummary,
+        DatePicker,
+        ID,
       });
       if (res.status === 200) {
         Swal.fire(
           `Great Job!`,
-          `You have successfully added new Compnay!`,
+          `You have successfully added new Work Order!`,
           "success"
         );
         navigate("/workorder");
@@ -38,6 +46,7 @@ const AddWorkOrder: React.FC = () => {
     }
   };
 
+  const defaultDate = dayjs(new Date()).format("YYYY-MM-DD");
   const onFinishFailed = (errorInfo: never) => {
     console.log("Failed:", errorInfo);
   };
@@ -75,21 +84,20 @@ const AddWorkOrder: React.FC = () => {
               rules={[
                 { required: true, message: "Please input your order summary!" },
               ]}
-            ></Form.Item>
+            >
+              <Form.Item>
+                <TextArea rows={4} />
+              </Form.Item>
+            </Form.Item>
             <Form.Item
               label="Start Date"
               name="DatePicker"
+              style={{ textAlign: "left" }}
               rules={[
                 { required: true, message: "Please pick the Starting Date!" },
               ]}
             >
-              <div
-                style={{
-                  textAlign: "left",
-                }}
-              >
-                <DatePicker size="large" />
-              </div>
+              <DatePicker format={dateFormat} size="large" />
             </Form.Item>
 
             <Form.Item>

@@ -3,7 +3,7 @@ import { Button, Table, Tag } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
-import { DataType, data } from "../data/CompanyList";
+import { DataType, data } from "../../data/CompanyList";
 import { Link } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [

@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import jwtDecode from "jwt-decode";
+import { decodedToken } from "./dashboard/Dashboard";
 
 interface LoginForm {
   email: any;
@@ -20,7 +22,14 @@ function Login() {
       } else {
         removeCookie("rememberEmail");
       }
-      navigate("/energyperformance");
+      const decodedToken: decodedToken = jwtDecode(localStorage.getItem("jwt"));
+      const role: string = decodedToken.Role;
+      {
+        role === "User" && navigate("/userenergyperformance");
+      }
+      {
+        role === "Admin" && navigate("/energyperformance");
+      }
     } catch (err) {
       if (err.response.status === 400) {
         alert("please enter the correct ID and Password");

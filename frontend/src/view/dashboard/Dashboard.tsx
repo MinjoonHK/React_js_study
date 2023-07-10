@@ -4,14 +4,13 @@ import {
   MenuUnfoldOutlined,
   DownOutlined,
 } from "@ant-design/icons";
-import type { MenuProps } from "antd";
 import { Layout, Menu, theme, Button, Dropdown, Space } from "antd";
-import { Link, NavLink, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import EnergyPerformance from "../../components/EnergyPerformance";
 import Pagemap from "../../components/Pagemap";
 import CompanyList from "../../components/CompanyList";
 import AddCompany from "../../components/CompanyAdd";
-import UserProfile from "../../components/UserProfile";
+import AdminProfile from "../../components/AdminProfile";
 import jwtDecode from "jwt-decode";
 import WorkOrder from "../../components/WorkOrder";
 import AddWorkOrder from "../../components/WorkorderAdd";
@@ -19,6 +18,10 @@ import UserList from "../../components/UserList";
 import Settings from "../../components/Settings";
 import DeviceInfo from "../../components/DeviceInfo";
 import AddDevice from "../../components/DeviceAdd";
+import UserEnergyPerformance from "../../components/userpage/UserEnergyPerfomance";
+import { AdminDashboard } from "./AdminDashboardMenu";
+import { DashboardDropdown } from "./DashboardDropdown";
+import { UserDashboard } from "./UserDashboardMenu";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,79 +29,8 @@ function logout() {
   localStorage.clear();
 }
 
-const items: MenuProps["items"] = [
-  {
-    label: "Performance",
-    key: "/Performance", //key name should be uniform
-    link: "/energyPerformance",
-  },
-  {
-    label: "Device Information",
-    key: "/deviceinfo", //key name should be uniform
-    link: "/deviceinfo",
-  },
-  {
-    label: "See in Map",
-    key: "/map", //key name should be uniform
-    link: "/map",
-  },
-  {
-    label: "Work Order",
-    key: "/WorkOrder", //key name should be uniform
-    link: "/workorder",
-  },
-  {
-    label: "Registered Companies",
-    key: "/CompanyList", //key name should be uniform
-    link: "/companylist",
-  },
-  {
-    label: "Registered Users",
-    key: "/UserList", //key name should be uniform
-    link: "/userlist",
-  },
-
-  {
-    label: "Settings",
-    key: "/settings", //key name should be uniform
-    link: "/settings",
-  },
-].map((item, index) => ({
-  key: String(index + 1),
-  label: item.link ? (
-    <NavLink style={{ textDecoration: "none" }} to={item.link}>
-      {item.label}
-    </NavLink>
-  ) : (
-    item.label
-  ),
-}));
-
-const userDropdown: MenuProps["items"] = [
-  {
-    label: (
-      <Link style={{ textDecoration: "none" }} to="/userinformation">
-        Profile
-      </Link>
-    ),
-    key: "0",
-  },
-  {
-    label: (
-      <Link
-        onClick={logout}
-        style={{ fontWeight: "bold", textDecoration: "none" }}
-        to="/login"
-      >
-        Logout
-      </Link>
-    ),
-    key: "1",
-  },
-];
-
-interface decodedToken {
-  ID: string;
+export interface decodedToken {
+  ID: number;
   Email: string;
   Name: string;
   Role: string;
@@ -110,6 +42,7 @@ const Dashboard: React.FC = () => {
   const [greeting, setGreeting] = useState("");
   const [firstName, setFirstName] = useState("");
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState("User");
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -124,6 +57,7 @@ const Dashboard: React.FC = () => {
     if (token) {
       const greetingName = decoded.Name;
       setFirstName(greetingName);
+      setUserRole(decoded.Role);
     }
     if (hour < 12) {
       setGreeting("Good Morning!");
@@ -151,12 +85,22 @@ const Dashboard: React.FC = () => {
         <div style={{ color: "white", margin: "20px" }}>
           <h2>Navigator</h2>
         </div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={items}
-        />
+        {userRole === "Admin" && (
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            items={AdminDashboard}
+          />
+        )}
+        {userRole === "User" && (
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            items={UserDashboard}
+          />
+        )}
       </Sider>
       <Layout>
         <Header
@@ -201,7 +145,7 @@ const Dashboard: React.FC = () => {
                 {greeting}
               </span>
 
-              <Dropdown menu={{ items: userDropdown }} trigger={["click"]}>
+              <Dropdown menu={{ items: DashboardDropdown }} trigger={["click"]}>
                 <a onClick={(e) => e.preventDefault()}>
                   <Space style={{ color: "black", fontSize: "18px" }}>
                     {firstName ? <>{firstName}</> : null}
@@ -225,7 +169,7 @@ const Dashboard: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            {
+            {userRole == "Admin" && (
               <Routes>
                 <Route
                   path="/dashboard"
@@ -245,11 +189,36 @@ const Dashboard: React.FC = () => {
                 <Route path="/addDevice" element={<AddDevice />}></Route>
                 <Route path="/addworkorder" element={<AddWorkOrder />}></Route>
                 <Route
-                  path="/userinformation"
-                  element={<UserProfile />}
+                  path="/admininformation"
+                  element={<AdminProfile />}
                 ></Route>
               </Routes>
-            }
+            )}
+            {userRole == "User" && (
+              <Routes>
+                <Route
+                  path="/dashboard"
+                  element={<UserEnergyPerformance />}
+                ></Route>
+                <Route
+                  path="/userenergyperformance"
+                  element={<UserEnergyPerformance />}
+                ></Route>
+                <Route path="/workorder" element={<WorkOrder />}></Route>
+                <Route path="/settings" element={<Settings />}></Route>
+                <Route path="/companylist" element={<CompanyList />}></Route>
+                <Route path="/userlist" element={<UserList />}></Route>
+                <Route path="/map" element={<Pagemap />}></Route>
+                <Route path="/deviceinfo" element={<DeviceInfo />}></Route>
+                <Route path="/addcompany" element={<AddCompany />}></Route>
+                <Route path="/addDevice" element={<AddDevice />}></Route>
+                <Route path="/addworkorder" element={<AddWorkOrder />}></Route>
+                <Route
+                  path="/admininformation"
+                  element={<AdminProfile />}
+                ></Route>
+              </Routes>
+            )}
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>©KELLON 2023</Footer>

@@ -5,29 +5,6 @@ import Dashboard from "./view/dashboard/Dashboard";
 import Signup from "./view/Signup";
 import ForgotPassword from "./view/forgotpassword";
 
-interface User {
-  accessToken: string;
-  refreshToken: string;
-  email: string;
-  isAdmin: boolean;
-}
-
-interface Jwt_decoded {
-  id: number;
-  isAdmin: boolean;
-  iat: number;
-  exp: number;
-}
-
-interface Res {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    email: string;
-    isAdmin: boolean;
-  };
-}
-
 function App() {
   return (
     <div className="App">

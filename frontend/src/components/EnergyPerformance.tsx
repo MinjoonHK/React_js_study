@@ -87,6 +87,18 @@ function EnergyPerformance() {
                       columns={overallColumns2}
                       pagination={false}
                     />
+                    <div style={{ marginTop: "5%", textAlign: "center" }}>
+                      <div style={{ fontSize: "20px", marginBottom: "5%" }}>
+                        <b> Average Monthly Power Generation</b>
+                      </div>
+                      <DemoLine />
+                    </div>
+                    <div style={{ marginTop: "5%", textAlign: "center" }}>
+                      <div style={{ fontSize: "20px", marginBottom: "5%" }}>
+                        <b>Average Daily Power Generation</b>
+                      </div>
+                      <DemoLine />
+                    </div>
                   </div>
                 ),
               },
@@ -143,23 +155,23 @@ function EnergyPerformance() {
             ]}
           />
           {/* <div>
-          <DemoLine />
-        </div>
-        <div>
-          <DemoLine />
-        </div>
-        <div>
-          <DemoLine />
-        </div>
-        <div>
-          <DemoLine />
-        </div>
-        <div>
-          <DemoColumn />
-        </div>
-        <div>
-          <DemoGauge />
-        </div> */}
+            <DemoLine />
+          </div>
+          <div>
+            <DemoLine />
+          </div>
+          <div>
+            <DemoLine />
+          </div>
+          <div>
+            <DemoLine />
+          </div>
+          <div>
+            <DemoColumn />
+          </div>
+          <div>
+            <DemoGauge />
+          </div> */}
         </div>
       ) : (
         <Select
