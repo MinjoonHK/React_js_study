@@ -12,8 +12,10 @@ import {
   getPerformanceInfo,
   deleteUserProfile,
   ActivateUser,
+  addworkorder,
 } from "../managers/dashboard.manager";
 import jwtDecode from "jwt-decode";
+import { workorderform } from "../models/forms/workorder.form";
 
 const dashboardRouter = express.Router();
 
@@ -105,7 +107,21 @@ dashboardRouter.post("/activateuser", async (req, res) => {
 dashboardRouter.post(
   "/workorder/addworkorder",
   async (req: Request, res: Response) => {
-    console.log(req.body.ID);
+    const { ID, DatePicker, ordersummary } = req.body;
+    let form = new workorderform();
+    form.ID = ID;
+    form.DatePicker = DatePicker;
+    form.ordersummary = ordersummary;
+    const errors = await validate(form);
+    if (errors.length > 0) {
+      res.status(400).json({
+        success: false,
+        error: "validation_error",
+        message: errors,
+      });
+      return;
+    }
+    let result = await addworkorder(ID, DatePicker, ordersummary);
   }
 );
 

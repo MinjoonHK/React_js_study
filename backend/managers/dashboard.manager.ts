@@ -117,3 +117,22 @@ export async function getPerformanceInfo(Location: string) {
     return null;
   }
 }
+
+export async function addworkorder(
+  ID: string,
+  DatePicker: string,
+  ordersummary: string
+) {
+  try {
+    const workorderQuery = "SELECT ID from site WHERE LocationName = ?";
+    const [site] = await pool.query(workorderQuery, [Location]);
+    const siteID = site[0].ID;
+    const resultQuery =
+      "SELECT Serial_Number, Status FROM devices WHERE site_ID = ?";
+    let [result] = await pool.query(resultQuery, [siteID]);
+    return result;
+  } catch (err) {
+    console.error(new Date(), "getComapnyList", err);
+    return null;
+  }
+}
