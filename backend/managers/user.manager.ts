@@ -64,8 +64,8 @@ class UserManager {
   generateAccessToken = (user: User): string => {
     return jwt.sign(
       {
-        ID: user.ID,
         Email: user.Email,
+        ID: user.ID,
         Name: user.FirstName,
         Role: user.Role,
       },

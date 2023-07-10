@@ -103,6 +103,13 @@ dashboardRouter.post("/activateuser", async (req, res) => {
 });
 
 dashboardRouter.post(
+  "/workorder/addworkorder",
+  async (req: Request, res: Response) => {
+    console.log(req.body.ID);
+  }
+);
+
+dashboardRouter.post(
   "/companylist/addcompany",
   async (req: Request, res: Response) => {
     const { company, owner, phoneNumber, address } = req.body;
