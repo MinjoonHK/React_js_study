@@ -8,4 +8,16 @@ export class workorderform {
 
   @IsString()
   DatePicker?: string;
+
+  @IsString()
+  Email?: string;
+
+  @IsString()
+  Name?: string;
+
+  @IsString()
+  Company?: string;
+
+  @IsString()
+  Contact?: string;
 }

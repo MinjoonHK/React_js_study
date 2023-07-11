@@ -55,11 +55,11 @@ export async function ActivateUser(ID: number[]) {
   }
 }
 
-export async function getUserProfile(email: string) {
+export async function getUserProfile(ID: number) {
   try {
     let [users, _] = (await pool.query(
-      "SELECT FirstName, LastName, Email, Role, PhoneNumber, isActive, created_at, Company FROM user WHERE Email = ? limit 0, 1",
-      [email]
+      "SELECT FirstName, LastName, Email, Role, PhoneNumber, isActive, created_at, Company FROM user WHERE ID = ? limit 0, 1",
+      [ID]
     )) as [User[], any];
     if (users.length) return users[0];
     else return null;
@@ -103,6 +103,18 @@ export async function getSiteList() {
   }
 }
 
+export async function getWorkOrder() {
+  try {
+    let [result] = await pool.query(
+      "SELECT Contact, Status, Orderer, Email, Company, OrderSummary, StartDate FROM workorder"
+    );
+    return result;
+  } catch (err) {
+    console.error(new Date(), "getComapnyList", err);
+    return null;
+  }
+}
+
 export async function getPerformanceInfo(Location: string) {
   try {
     const siteQuery = "SELECT ID from site WHERE LocationName = ?";
@@ -119,20 +131,22 @@ export async function getPerformanceInfo(Location: string) {
 }
 
 export async function addworkorder(
-  ID: string,
+  ID: number,
   DatePicker: string,
-  ordersummary: string
+  ordersummary: string,
+  Email: string,
+  Company: string,
+  Name: string,
+  Contact: string
 ) {
   try {
-    const workorderQuery = "SELECT ID from site WHERE LocationName = ?";
-    const [site] = await pool.query(workorderQuery, [Location]);
-    const siteID = site[0].ID;
-    const resultQuery =
-      "SELECT Serial_Number, Status FROM devices WHERE site_ID = ?";
-    let [result] = await pool.query(resultQuery, [siteID]);
-    return result;
+    const [rows, fields] = await pool.execute(
+      "INSERT INTO workorder (Orderer, Email, Company,Contact, OrderSummary, StartDate, user_ID) VALUES(?, ?, ?, ?, ?, ?, ?);",
+      [Name, Email, Company, Contact, ordersummary, DatePicker, ID]
+    );
+    return rows.insertId;
   } catch (err) {
-    console.error(new Date(), "getComapnyList", err);
+    console.error(new Date(), "addWorkOrder", err);
     return null;
   }
 }
