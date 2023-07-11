@@ -19,9 +19,9 @@ import Settings from "../../components/Settings";
 import DeviceInfo from "../../components/DeviceInfo";
 import AddDevice from "../../components/DeviceAdd";
 import UserEnergyPerformance from "../../components/userpage/UserEnergyPerfomance";
-import { AdminDashboard } from "./AdminDashboardMenu";
-import { DashboardDropdown } from "./DashboardDropdown";
-import { UserDashboard } from "./UserDashboardMenu";
+import { AdminDashboard } from "./DashboardComponents/AdminDashboardMenu";
+import { DashboardDropdown } from "./DashboardComponents/DashboardDropdown";
+import { UserDashboard } from "./DashboardComponents/UserDashboardMenu";
 
 const { Header, Content, Footer, Sider } = Layout;
 

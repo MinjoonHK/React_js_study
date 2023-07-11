@@ -1,52 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Table, Tag } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
-import { DataType, data } from "../data/CompanyList";
+import { DataType, data } from "../data/WorkOrderList";
 import { Link } from "react-router-dom";
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "CompanyName",
-    dataIndex: "CompanyName",
+    title: "Company Name",
+    dataIndex: "Company",
+    align: "center",
+  },
+  {
+    title: "Orderer",
+    dataIndex: "Orderer",
     align: "center",
   },
   {
     title: "Contact",
+    dataIndex: "Contact",
     align: "center",
-    dataIndex: "contact",
   },
   {
     title: "Email",
-    align: "center",
-    dataIndex: "maintainence",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
+    dataIndex: "Email",
     align: "center",
   },
   {
     title: "Work Order Summary",
+    dataIndex: "OrderSummary",
     align: "center",
-    dataIndex: "maintainence",
   },
-
+  {
+    title: "Start Date",
+    dataIndex: "StartDate",
+    align: "center",
+    sorter: (a, b) =>
+      new Date(a.StartDate).valueOf() - new Date(b.StartDate).valueOf(),
+  },
+  {
+    title: "End Date",
+    dataIndex: "EndDate",
+    align: "center",
+    sorter: (a, b) =>
+      new Date(a.StartDate).valueOf() - new Date(b.StartDate).valueOf(),
+  },
   {
     title: "Status",
-    key: "isActive",
-    dataIndex: "isActive",
+    key: "Status",
+    dataIndex: "Status",
     align: "center",
-    // render: (_, { isActive }) => (
-    //   <>
-    //     {isActive === "Active" && (
-    //       <Tag color="success" key={isActive}>
-    //         {isActive}
-    //       </Tag>
-    //     )}
-    //   </>
-    // ),
+  },
+  {
+    key: "Status",
+    align: "center",
   },
 ];
 
@@ -58,25 +66,10 @@ const WorkOrder: React.FC = () => {
   const [rowSelection, setRowSelection] = useState<
     TableRowSelection<DataType> | undefined
   >({});
-  const [hasData, setHasData] = useState(true);
   const [tableLayout, setTableLayout] = useState();
   const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState<string>();
-
-  const scroll: { x?: number | string; y?: number | string } = {};
-  if (yScroll) {
-    scroll.y = 240;
-  }
-  if (xScroll) {
-    scroll.x = "100vw";
-  }
-
+  const [dataList, setDataList] = useState([]);
   const tableColumns = columns.map((item) => ({ ...item, ellipsis }));
-  if (xScroll === "fixed") {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = "right";
-  }
 
   const tableProps: TableProps<DataType> = {
     bordered,
@@ -84,25 +77,32 @@ const WorkOrder: React.FC = () => {
     size,
     showHeader,
     rowSelection,
-    scroll,
     tableLayout,
   };
-  data();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await data();
+        setDataList(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
-        <Link to="/addWorkOrder">
+        <Link to="/addworkorder">
           <Button>
             <b>Click to add Work Order +</b>
           </Button>
         </Link>
       </div>
-      <Table
-        {...tableProps}
-        columns={tableColumns}
-        // dataSource={hasData ? data : []}
-        scroll={scroll}
-      />
+      <Table {...tableProps} columns={tableColumns} dataSource={dataList} />
     </>
   );
 };

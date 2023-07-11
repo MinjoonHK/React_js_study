@@ -9,7 +9,6 @@ const { Option } = Select;
 
 function SignUp() {
   const navigate = useNavigate();
-  const MySwal = withReactContent(Swal);
   const onFinish = async ({
     firstName,
     lastName,
