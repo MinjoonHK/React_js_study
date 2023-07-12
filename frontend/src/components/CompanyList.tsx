@@ -1,41 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Table, Tag } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
-import type { ColumnsType, TableProps } from "antd/es/table";
+import type { TableProps } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
 import { DataType, data } from "../data/CompanyList";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Company Name",
-    dataIndex: "Name",
-    align: "center",
-  },
-  {
-    title: "Address",
-    dataIndex: "Address",
-    align: "center",
-  },
-  {
-    title: "Owner",
-    dataIndex: "Owner",
-    align: "center",
-  },
-  {
-    title: "Contact",
-    dataIndex: "Contact",
-    align: "center",
-  },
-  {
-    title: "Joined Date",
-    align: "center",
-    dataIndex: "Created_at",
-    sorter: (a, b) =>
-      new Date(a.Created_at).valueOf() - new Date(b.Created_at).valueOf(),
-  },
-];
+import { columns } from "../data/TableColumns/CompanyListTable";
 
 const CompanyList: React.FC = () => {
   const [dataList, setDataList] = useState<DataType[]>([]);

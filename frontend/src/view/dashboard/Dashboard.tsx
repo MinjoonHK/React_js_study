@@ -22,6 +22,7 @@ import UserEnergyPerformance from "../../components/userpage/UserEnergyPerfomanc
 import { AdminDashboard } from "./DashboardComponents/AdminDashboardMenu";
 import { DashboardDropdown } from "./DashboardComponents/DashboardDropdown";
 import { UserDashboard } from "./DashboardComponents/UserDashboardMenu";
+import WorkOrderDetail from "../../components/WorkOrderDetail";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -191,6 +192,10 @@ const Dashboard: React.FC = () => {
                 <Route
                   path="/admininformation"
                   element={<AdminProfile />}
+                ></Route>
+                <Route
+                  path="/workorderdetail"
+                  element={<WorkOrderDetail />}
                 ></Route>
               </Routes>
             )}

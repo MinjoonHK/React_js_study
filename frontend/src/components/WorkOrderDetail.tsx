@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Form,
-  Card,
-  DatePicker,
-  message,
-  Upload,
-  Input,
-  Space,
-  Dropdown,
-} from "antd";
-import type { MenuProps, UploadFile, UploadProps } from "antd";
+import { Button, Form, Card, DatePicker, message, Upload, Input } from "antd";
+import type { MenuProps, UploadProps } from "antd";
 import { InboxOutlined, DownOutlined, UserOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -20,19 +10,41 @@ import jwtDecode from "jwt-decode";
 import { decodedToken } from "../view/dashboard/Dashboard";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { RcFile } from "antd/es/upload";
-import { items } from "../data/TableColumns/WorkOrderCategory";
 
 dayjs.extend(customParseFormat);
 const dateFormat = "YYYY/MM/DD";
 type SizeType = Parameters<typeof Form>[0]["size"];
 
-const AddWorkOrder: React.FC = () => {
-  const [selectedCategory, setSelectCategory] = useState("Select Category");
+const items: MenuProps["items"] = [
+  {
+    label: "1st menu item",
+    key: "1",
+    icon: <UserOutlined />,
+  },
+  {
+    label: "2nd menu item",
+    key: "2",
+    icon: <UserOutlined />,
+  },
+  {
+    label: "3rd menu item",
+    key: "3",
+    icon: <UserOutlined />,
+    danger: true,
+  },
+  {
+    label: "4rd menu item",
+    key: "4",
+    icon: <UserOutlined />,
+    danger: true,
+    disabled: true,
+  },
+];
+const WorkOrderDetail: React.FC = () => {
+  const [selectCategory, setSelectCategory] = useState("Select Category");
   const [componentSize, setComponentSize] = useState<SizeType | "default">(
     "default"
   );
-  const [fileList, setFileList] = useState([]);
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState({
@@ -42,11 +54,7 @@ const AddWorkOrder: React.FC = () => {
     FirstName: "",
     LastName: "",
   });
-
-  const menuProps = {
-    items,
-    onClick: ({ key }) => setSelectCategory(key),
-  };
+  const [images, setImages] = useState([]);
 
   const getUserInfo = async (token: any) => {
     try {
@@ -67,7 +75,6 @@ const AddWorkOrder: React.FC = () => {
   const onFormLayoutChange = ({ size }: { size: SizeType }) => {
     setComponentSize(size);
   };
-
   const onFinish = async ({
     ordersummary,
     DatePicker,
@@ -76,8 +83,6 @@ const AddWorkOrder: React.FC = () => {
     Company,
     Name,
     UploadImage,
-    Category,
-    OrderTitle,
   }) => {
     try {
       const decoded: decodedToken = jwtDecode(localStorage.getItem("jwt"));
@@ -91,8 +96,6 @@ const AddWorkOrder: React.FC = () => {
         Name,
         Contact,
         UploadImage,
-        Category,
-        OrderTitle,
       });
       if (res.status === 200) {
         Swal.fire(
@@ -112,6 +115,7 @@ const AddWorkOrder: React.FC = () => {
   };
 
   const normFile = (e: any) => {
+    console.log("Upload event:", e);
     if (Array.isArray(e)) {
       return e;
     }
@@ -120,25 +124,24 @@ const AddWorkOrder: React.FC = () => {
 
   const upload: UploadProps = {
     name: "file",
-    multiple: true,
+    multiple: false,
     action: "",
-    beforeUpload: (file: RcFile, fileList: RcFile[]) => {
+    beforeUpload: (file, fileList) => {
       console.log("before", file, fileList);
-      // const reader = new FileReader();
-      // reader.onloadend = () => {
-      //   console.log("reader", reader);
-      // };
-      // reader.readAsDataURL(file);
-      // const blob = file instanceof Blob ? file : new Blob([file]);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        console.log("reader", reader.result);
+        setImages([...images, reader.result]);
+      };
+      reader.readAsDataURL(file);
+      //const blob = file instanceof Blob ? file : new Blob([file]);
       // const url = URL.createObjectURL(blob);
-
       return false;
     },
-
     onChange(info) {
       const { status } = info.file;
       if (status !== "uploading") {
-        // console.log(info.file, info.fileList);
+        console.log(info.file, info.fileList);
       }
       if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
@@ -146,9 +149,9 @@ const AddWorkOrder: React.FC = () => {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
-    // onDrop(e) {
-    //   console.log("Dropped files", e.dataTransfer.files);
-    // },
+    onDrop(e) {
+      console.log("Dropped files", e.dataTransfer.files);
+    },
   };
 
   return (
@@ -164,8 +167,44 @@ const AddWorkOrder: React.FC = () => {
       >
         <Card
           title={
-            <div style={{ fontWeight: "bold", fontSize: "25px" }}>
-              Add New Work Order
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                fontWeight: "bold",
+                fontSize: "25px",
+              }}
+            >
+              <span>This is Work Order Detail</span>
+              <span>
+                <Button
+                  onClick={() => {
+                    let myWindow = window.open("", "", "width=600,height=800");
+                    myWindow.document.write(
+                      `<table>
+                        <tbody>
+                          <tr>
+                            <th>Company</th>
+                            <td>${userInfo.Company}</td>
+                          </tr>
+                          <tr>
+                            <th>Orderer Name</th>
+                            <td>${userInfo.FirstName} ${userInfo.LastName}</td>
+                          </tr>
+                        </tbody>
+                      </table>`
+                    );
+                    myWindow.document.close();
+                    myWindow.focus();
+                    myWindow.print();
+                    myWindow.close();
+                  }}
+                  style={{ backgroundColor: "rgb(45,68,134)", color: "white" }}
+                >
+                  Print Report in PDF
+                </Button>
+              </span>
             </div>
           }
           bordered={false}
@@ -206,9 +245,7 @@ const AddWorkOrder: React.FC = () => {
               rules={[
                 { required: true, message: "Please input your Company Name!" },
               ]}
-            >
-              <Input />
-            </Form.Item>
+            ></Form.Item>
             <Form.Item
               label="Company"
               name="Company"
@@ -216,7 +253,7 @@ const AddWorkOrder: React.FC = () => {
                 { required: true, message: "Please input your Company Name!" },
               ]}
             >
-              <Input />
+              <Input disabled={true} />
             </Form.Item>
             <Form.Item
               label="Email"
@@ -227,62 +264,14 @@ const AddWorkOrder: React.FC = () => {
             >
               <Input />
             </Form.Item>
-
             <Form.Item
               label="Contact"
               name="Contact"
               rules={[
-                {
-                  required: true,
-                  message: "Please input your Company Name!",
-                },
+                { required: true, message: "Please input your Company Name!" },
               ]}
             >
               <Input />
-            </Form.Item>
-            <Form.Item style={{ textAlign: "left" }}>
-              <Form.Item
-                label="Order Title"
-                name="OrderTitle"
-                rules={[{ required: true }]}
-                style={{
-                  display: "inline-block",
-                  width: "70%",
-                  textAlign: "left",
-                }}
-              >
-                <Input placeholder="Please input order title" />
-              </Form.Item>
-              <Form.Item
-                label="Category"
-                name="Category"
-                rules={[
-                  { required: true, message: "Please Select the Cateogry!" },
-                ]}
-                style={{
-                  display: "inline-block",
-                  textAlign: "left",
-                  marginLeft: "1%",
-                  marginBottom: 0,
-                }}
-              >
-                <Dropdown menu={menuProps}>
-                  <Button>
-                    <Space>
-                      {selectedCategory}
-                      <DownOutlined />
-                    </Space>
-                  </Button>
-                </Dropdown>
-                {selectedCategory === "Other" && (
-                  <Form.Item
-                    name="OtherCategory"
-                    style={{ display: "inline-block" }}
-                  >
-                    <Input placeholder="Please Specify" />
-                  </Form.Item>
-                )}
-              </Form.Item>
             </Form.Item>
             <Form.Item
               label="Order Summary"
@@ -292,6 +281,16 @@ const AddWorkOrder: React.FC = () => {
                 { required: true, message: "Please input your order summary!" },
               ]}
             >
+              {/* <Form.Item>
+                <Dropdown>
+                  <Button>
+                    <Space>
+                      Select Category
+                      <DownOutlined />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              </Form.Item> */}
               <TextArea rows={4} />
             </Form.Item>
 
@@ -343,10 +342,13 @@ const AddWorkOrder: React.FC = () => {
               </div>
             </Form.Item>
           </Form>
+          {images.map((img, idx) => {
+            return <img src={img} key={"img" + idx} />;
+          })}
         </Card>
       </div>
     </div>
   );
 };
 
-export default AddWorkOrder;
+export default WorkOrderDetail;

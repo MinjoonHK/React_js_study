@@ -5,67 +5,15 @@ import type { ColumnsType, TableProps } from "antd/es/table";
 import type { TableRowSelection } from "antd/es/table/interface";
 import { DataType, data } from "../data/WorkOrderList";
 import { Link } from "react-router-dom";
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Company Name",
-    dataIndex: "Company",
-    align: "center",
-  },
-  {
-    title: "Orderer",
-    dataIndex: "Orderer",
-    align: "center",
-  },
-  {
-    title: "Contact",
-    dataIndex: "Contact",
-    align: "center",
-  },
-  {
-    title: "Email",
-    dataIndex: "Email",
-    align: "center",
-  },
-  {
-    title: "Work Order Summary",
-    dataIndex: "OrderSummary",
-    align: "center",
-  },
-  {
-    title: "Start Date",
-    dataIndex: "StartDate",
-    align: "center",
-    sorter: (a, b) =>
-      new Date(a.StartDate).valueOf() - new Date(b.StartDate).valueOf(),
-  },
-  {
-    title: "End Date",
-    dataIndex: "EndDate",
-    align: "center",
-    sorter: (a, b) =>
-      new Date(a.StartDate).valueOf() - new Date(b.StartDate).valueOf(),
-  },
-  {
-    title: "Status",
-    key: "Status",
-    dataIndex: "Status",
-    align: "center",
-  },
-  {
-    key: "Status",
-    align: "center",
-  },
-];
+import { columns } from "../data/TableColumns/WorkOrderTable";
+import axios from "axios";
 
 const WorkOrder: React.FC = () => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [bordered, setBordered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<SizeType>("large");
   const [showHeader, setShowHeader] = useState(true);
-  const [rowSelection, setRowSelection] = useState<
-    TableRowSelection<DataType> | undefined
-  >({});
   const [tableLayout, setTableLayout] = useState();
   const [ellipsis, setEllipsis] = useState(false);
   const [dataList, setDataList] = useState([]);
@@ -76,7 +24,6 @@ const WorkOrder: React.FC = () => {
     loading,
     size,
     showHeader,
-    rowSelection,
     tableLayout,
   };
 
@@ -93,6 +40,28 @@ const WorkOrder: React.FC = () => {
     fetchData();
   }, []);
 
+  const FinishOrder = async () => {
+    try {
+      const res = await axios.post("/dashboard/finishorder", {
+        params: { FinishOrderList: selectedRowKeys },
+      });
+      if (res.status == 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const hasSelected = selectedRowKeys.length > 0;
+
   return (
     <>
       <div style={{ textAlign: "left", marginBottom: "20px" }}>
@@ -101,8 +70,19 @@ const WorkOrder: React.FC = () => {
             <b>Click to add Work Order +</b>
           </Button>
         </Link>
+        <Button onClick={FinishOrder} style={{ marginLeft: "1%" }}>
+          <b>Click to Finish Work Order</b>
+        </Button>
+        <span style={{ marginLeft: 8 }}>
+          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+        </span>
       </div>
-      <Table {...tableProps} columns={tableColumns} dataSource={dataList} />
+      <Table
+        rowSelection={rowSelection}
+        {...tableProps}
+        columns={tableColumns}
+        dataSource={dataList}
+      />
     </>
   );
 };

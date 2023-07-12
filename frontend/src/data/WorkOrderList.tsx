@@ -10,6 +10,7 @@ export interface DataType {
   contact?: string;
   StartDate?: string;
   Status?: string;
+  EndDate?: string;
 }
 export const data = async (): Promise<DataType[]> => {
   const response = await axios.get<DataType[]>("/dashboard/workorder");
@@ -17,10 +18,14 @@ export const data = async (): Promise<DataType[]> => {
     ...item,
     key: item.ID,
     StartDate: formatDate(item.StartDate),
+    EndDate: formatDate(item.EndDate),
   }));
   return newData;
 };
-function formatDate(dateString: string) {
+function formatDate(dateString: string | null) {
+  if (!dateString) {
+    return null;
+  }
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
