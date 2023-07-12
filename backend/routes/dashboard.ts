@@ -14,9 +14,11 @@ import {
   ActivateUser,
   addworkorder,
   getWorkOrder,
+  updateworkorder,
 } from "../managers/dashboard.manager";
 import jwtDecode from "jwt-decode";
 import { workorderform } from "../models/forms/workorder.form";
+import { updateWorkOrder } from "../models/forms/updateworkorder.form";
 
 const dashboardRouter = express.Router();
 
@@ -80,6 +82,28 @@ dashboardRouter.post("/deactivateuser", async (req, res) => {
     res.status(200).send("Successfully deleted user");
   } else {
     res.status(400).json("Failed to delete user");
+  }
+});
+
+dashboardRouter.post("/finishorder", async (req, res) => {
+  const ID = req.body.params.FinishOrderList;
+  let form = new updateWorkOrder();
+  form.numbers = ID;
+  const errors = await validate(form);
+  if (errors.length > 0) {
+    //if there is error
+    res.status(400).json({
+      success: false,
+      error: "validation_error",
+      message: errors,
+    });
+    return;
+  }
+  let result = await updateworkorder(ID);
+  if (result) {
+    res.status(200).send("Successfully updated Working Status");
+  } else {
+    res.status(400).json("Failed to Update Working Status");
   }
 });
 

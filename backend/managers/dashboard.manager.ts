@@ -55,6 +55,23 @@ export async function ActivateUser(ID: number[]) {
   }
 }
 
+export async function updateworkorder(ID: number[]) {
+  try {
+    const query =
+      "UPDATE workorder SET Status = 'Completed', EndDate = NOW() WHERE Status = 'Progressing' AND ID = ?";
+    let affectedRows = 0;
+    for (const id of ID) {
+      const result = await pool.query(query, id);
+      affectedRows += result[0].affectedRows;
+    }
+    console.log(affectedRows, "Order Status have Successfully Updated");
+    return affectedRows;
+  } catch (err) {
+    console.error(new Date(), "updateworkorder", err);
+    return 0;
+  }
+}
+
 export async function getUserProfile(ID: number) {
   try {
     let [users, _] = (await pool.query(
@@ -106,7 +123,7 @@ export async function getSiteList() {
 export async function getWorkOrder() {
   try {
     let [result] = await pool.query(
-      "SELECT Contact, Status, Orderer, Email, Company, OrderSummary, StartDate FROM workorder"
+      "SELECT ID, Contact, Status, Orderer, Email, Company, OrderSummary, StartDate, EndDate FROM workorder"
     );
     return result;
   } catch (err) {
